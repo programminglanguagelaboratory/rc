@@ -10,7 +10,20 @@ func TestToken(t *testing.T) {
 	for _, testcase := range []struct {
 		code     string
 		expected token.Token
-	}{} {
+	}{
+		{"id", token.Token{Str: "id", Kind: token.ID}},
+		{"\"string\"", token.Token{Str: "\"string\"", Kind: token.STRING}},
+		{"10", token.Token{Str: "10", Kind: token.NUMBER}},
+
+		{"+", token.Token{Str: "+", Kind: token.PLUS}},
+		{"-", token.Token{Str: "-", Kind: token.MINUS}},
+		{"*", token.Token{Str: "*", Kind: token.ASTERISK}},
+		{"/", token.Token{Str: "/", Kind: token.SLASH}},
+
+		{".", token.Token{Str: ".", Kind: token.DOT}},
+		{"(", token.Token{Str: "(", Kind: token.LPAREN}},
+		{")", token.Token{Str: ")", Kind: token.RPAREN}},
+	} {
 		lexer := Lexer{}
 		actual := lexer.lex()
 		if testcase.expected != actual {
