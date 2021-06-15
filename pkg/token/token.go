@@ -1,5 +1,6 @@
 package token
 
+// TODO: add position info
 type Token struct {
 	Str  string
 	Kind int
@@ -21,3 +22,7 @@ const (
 
 	EOF
 )
+
+func (token Token) String() string {
+	return token.Str
+}
