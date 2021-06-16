@@ -24,8 +24,7 @@ func TestToken(t *testing.T) {
 		{"(", token.Token{Str: "(", Kind: token.LPAREN}},
 		{")", token.Token{Str: ")", Kind: token.RPAREN}},
 	} {
-		lexer := Lexer{}
-		actual, _ := lexer.Lex()
+		actual, _ := newLexer(testcase.code).Lex()
 		if testcase.expected != actual {
 			t.Errorf(
 				"given %v, expected %v, but got actual %v",
