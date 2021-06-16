@@ -15,86 +15,83 @@ type lexer struct {
 }
 
 func newLexer(code string) *lexer {
-	lexer := lexer{}
-	lexer.code = code
-	lexer.index = 0
+	l := lexer{}
+	l.code = code
+	l.index = 0
 
-	if lexer.index >= len(lexer.code) {
-		lexer.ch = EOF
+	if l.index >= len(l.code) {
+		l.ch = EOF
 	} else {
-		lexer.ch = []rune(lexer.code)[lexer.index]
+		l.ch = []rune(l.code)[l.index]
 	}
 
-	return &lexer
+	return &l
 }
 
-func (lexer *lexer) next() {
-	lexer.index++
+func (l *lexer) next() {
+	l.index++
 
-	if lexer.index >= len(lexer.code) {
-		lexer.ch = EOF
+	if l.index >= len(l.code) {
+		l.ch = EOF
 		return
 	}
 
-	lexer.ch = []rune(lexer.code)[lexer.index]
+	l.ch = []rune(l.code)[l.index]
 }
 
-func (lexer *lexer) lexString() (token.Token, error) {
-	start := lexer.index
-	lexer.next()
+func (l *lexer) lexString() (token.Token, error) {
+	start := l.index
+	l.next()
 
 	for {
-		if lexer.ch == EOF {
+		if l.ch == EOF {
 			return token.Token{}, errors.New("unterminated string literal")
 		}
-		if lexer.ch == '"' {
+		if l.ch == '"' {
 			break
 		}
-		lexer.next()
+		l.next()
 	}
 
-	lexer.next()
-	return token.Token{
-		Str:  lexer.code[start:lexer.index],
-		Kind: token.STRING,
-	}, nil
+	l.next()
+	return token.Token{Str: l.code[start:l.index], Kind: token.STRING}, nil
 }
 
-func (lexer *lexer) Lex() (token.Token, error) {
+func (l *lexer) Lex() (token.Token, error) {
 	switch {
 
-	case lexer.ch == '"':
-		return lexer.lexString()
+	case l.ch == '"':
+		return l.lexString()
 
-	case lexer.ch == '+':
-		lexer.next()
+	case l.ch == '+':
+		l.next()
 		return token.Token{Str: "+", Kind: token.PLUS}, nil
 
-	case lexer.ch == '-':
-		lexer.next()
+	case l.ch == '-':
+		l.next()
 		return token.Token{Str: "-", Kind: token.MINUS}, nil
 
-	case lexer.ch == '*':
-		lexer.next()
+	case l.ch == '*':
+		l.next()
 		return token.Token{Str: "*", Kind: token.ASTERISK}, nil
 
-	case lexer.ch == '/':
-		lexer.next()
+	case l.ch == '/':
+		l.next()
 		return token.Token{Str: "/", Kind: token.SLASH}, nil
 
-	case lexer.ch == '.':
-		lexer.next()
+	case l.ch == '.':
+		l.next()
 		return token.Token{Str: ".", Kind: token.DOT}, nil
 
-	case lexer.ch == '(':
-		lexer.next()
+	case l.ch == '(':
+		l.next()
 		return token.Token{Str: "(", Kind: token.LPAREN}, nil
 
-	case lexer.ch == ')':
-		lexer.next()
+	case l.ch == ')':
+		l.next()
 		return token.Token{Str: ")", Kind: token.RPAREN}, nil
 
-	case lexer.ch == EOF:
+	case l.ch == EOF:
 		return token.Token{Kind: token.EOF}, nil
 	}
 
