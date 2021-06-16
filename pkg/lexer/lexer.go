@@ -2,6 +2,7 @@ package lexer
 
 import (
 	"errors"
+	"unicode"
 
 	"github.com/programminglanguagelaboratory/rc/pkg/token"
 )
@@ -39,6 +40,10 @@ func (l *lexer) next() {
 	l.ch = []rune(l.code)[l.index]
 }
 
+func (l *lexer) lexId() (token.Token, error) {
+	return token.Token{}, errors.New("not implemented")
+}
+
 func (l *lexer) lexString() (token.Token, error) {
 	start := l.index
 	l.next()
@@ -57,11 +62,21 @@ func (l *lexer) lexString() (token.Token, error) {
 	return token.Token{Str: l.code[start:l.index], Kind: token.STRING}, nil
 }
 
+func (l *lexer) lexNumber() (token.Token, error) {
+	return token.Token{}, errors.New("not implemented")
+}
+
 func (l *lexer) Lex() (token.Token, error) {
 	switch {
 
+	case unicode.IsDigit(l.ch):
+		return l.lexNumber()
+
 	case l.ch == '"':
 		return l.lexString()
+
+	case unicode.IsLetter(l.ch):
+		return l.lexId()
 
 	case l.ch == '+':
 		l.next()
