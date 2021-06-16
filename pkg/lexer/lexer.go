@@ -41,7 +41,13 @@ func (l *lexer) next() {
 }
 
 func (l *lexer) lexId() (token.Token, error) {
-	return token.Token{}, errors.New("not implemented")
+	start := l.index
+
+	for l.ch != EOF && unicode.IsLetter(l.ch) {
+		l.next()
+	}
+
+	return token.Token{Str: l.code[start:l.index], Kind: token.ID}, nil
 }
 
 func (l *lexer) lexString() (token.Token, error) {
