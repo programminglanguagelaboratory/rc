@@ -1,11 +1,14 @@
 package lexer
 
-import "github.com/programminglanguagelaboratory/rc/pkg/token"
+import (
+	"errors"
+
+	"github.com/programminglanguagelaboratory/rc/pkg/token"
+)
 
 type Lexer struct {
 }
 
-// TODO: impl error handling
-func (lexer *Lexer) lex() token.Token {
-	return token.Token{}
+func (lexer *Lexer) Lex() (token.Token, error) {
+	return token.Token{}, errors.New("not implemented")
 }
