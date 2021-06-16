@@ -63,7 +63,13 @@ func (l *lexer) lexString() (token.Token, error) {
 }
 
 func (l *lexer) lexNumber() (token.Token, error) {
-	return token.Token{}, errors.New("not implemented")
+	start := l.index
+
+	for l.ch != EOF && unicode.IsDigit(l.ch) {
+		l.next()
+	}
+
+	return token.Token{Str: l.code[start:l.index], Kind: token.NUMBER}, nil
 }
 
 func (l *lexer) Lex() (token.Token, error) {
