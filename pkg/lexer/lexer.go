@@ -39,8 +39,33 @@ func (lexer *lexer) next() {
 	lexer.ch = []rune(lexer.code)[lexer.index]
 }
 
+func (lexer *lexer) lexString() (token.Token, error) {
+	start := lexer.index
+	lexer.next()
+
+	for {
+		if lexer.ch == EOF {
+			return token.Token{}, errors.New("unterminated string literal")
+		}
+		if lexer.ch == '"' {
+			break
+		}
+		lexer.next()
+	}
+
+	lexer.next()
+	return token.Token{
+		Str:  lexer.code[start:lexer.index],
+		Kind: token.STRING,
+	}, nil
+}
+
 func (lexer *lexer) Lex() (token.Token, error) {
 	switch {
+
+	case lexer.ch == '"':
+		return lexer.lexString()
+
 	case lexer.ch == '+':
 		lexer.next()
 		return token.Token{Str: "+", Kind: token.PLUS}, nil
