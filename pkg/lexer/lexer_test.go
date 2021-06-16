@@ -11,6 +11,7 @@ func TestToken(t *testing.T) {
 		code     string
 		expected token.Token
 	}{
+		{"\n\r id", token.Token{Str: "id", Kind: token.ID}},
 		{"id", token.Token{Str: "id", Kind: token.ID}},
 		{"\"string\"", token.Token{Str: "\"string\"", Kind: token.STRING}},
 		{"10", token.Token{Str: "10", Kind: token.NUMBER}},

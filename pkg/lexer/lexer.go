@@ -78,7 +78,14 @@ func (l *lexer) lexNumber() (token.Token, error) {
 	return token.Token{Str: l.code[start:l.index], Kind: token.NUMBER}, nil
 }
 
+func (l *lexer) skipSpaces() {
+	for unicode.IsSpace(l.ch) {
+		l.next()
+	}
+}
+
 func (l *lexer) Lex() (token.Token, error) {
+	l.skipSpaces()
 	switch {
 
 	case unicode.IsDigit(l.ch):
