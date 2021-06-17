@@ -1,5 +1,7 @@
 package ast
 
+import "github.com/programminglanguagelaboratory/rc/pkg/token"
+
 type Expr interface{}
 
 type Id string
@@ -7,12 +9,12 @@ type Id string
 type BinOpExpr struct {
 	Left  Expr
 	Right Expr
-	Op    string
+	Token token.Token
 }
 
 type UnOpExpr struct {
-	Left Expr
-	Op   string
+	Left  Expr
+	Token token.Token
 }
 
 type CallExpr struct {
@@ -26,5 +28,5 @@ type FieldExpr struct {
 }
 
 type LitExpr struct {
-	Lit string
+	Token token.Token
 }
