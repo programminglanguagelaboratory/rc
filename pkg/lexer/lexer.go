@@ -9,14 +9,14 @@ import (
 
 const EOF = -1
 
-type lexer struct {
+type Lexer struct {
 	code  string
 	index int
 	ch    rune
 }
 
-func newLexer(code string) *lexer {
-	l := lexer{}
+func NewLexer(code string) *Lexer {
+	l := Lexer{}
 	l.code = code
 	l.index = 0
 
@@ -29,7 +29,7 @@ func newLexer(code string) *lexer {
 	return &l
 }
 
-func (l *lexer) next() {
+func (l *Lexer) next() {
 	l.index++
 
 	if l.index >= len(l.code) {
@@ -40,7 +40,7 @@ func (l *lexer) next() {
 	l.ch = []rune(l.code)[l.index]
 }
 
-func (l *lexer) lexId() (token.Token, error) {
+func (l *Lexer) lexId() (token.Token, error) {
 	start := l.index
 
 	for l.ch != EOF && unicode.IsLetter(l.ch) {
@@ -50,7 +50,7 @@ func (l *lexer) lexId() (token.Token, error) {
 	return token.Token{Str: l.code[start:l.index], Kind: token.ID}, nil
 }
 
-func (l *lexer) lexString() (token.Token, error) {
+func (l *Lexer) lexString() (token.Token, error) {
 	start := l.index
 	l.next()
 
@@ -68,7 +68,7 @@ func (l *lexer) lexString() (token.Token, error) {
 	return token.Token{Str: l.code[start:l.index], Kind: token.STRING}, nil
 }
 
-func (l *lexer) lexNumber() (token.Token, error) {
+func (l *Lexer) lexNumber() (token.Token, error) {
 	start := l.index
 
 	for l.ch != EOF && unicode.IsDigit(l.ch) {
@@ -78,13 +78,13 @@ func (l *lexer) lexNumber() (token.Token, error) {
 	return token.Token{Str: l.code[start:l.index], Kind: token.NUMBER}, nil
 }
 
-func (l *lexer) skipSpaces() {
+func (l *Lexer) skipSpaces() {
 	for unicode.IsSpace(l.ch) {
 		l.next()
 	}
 }
 
-func (l *lexer) Lex() (token.Token, error) {
+func (l *Lexer) Lex() (token.Token, error) {
 	l.skipSpaces()
 	switch {
 
