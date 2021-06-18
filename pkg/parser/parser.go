@@ -2,6 +2,7 @@ package parser
 
 import (
 	"errors"
+	"fmt"
 
 	"github.com/programminglanguagelaboratory/rc/pkg/ast"
 	"github.com/programminglanguagelaboratory/rc/pkg/lexer"
@@ -37,8 +38,26 @@ func (p *parser) parsePrimaryExpr() (ast.Expr, error) {
 		p.next()
 		return t, nil
 	case token.LPAREN:
-		p.next()
-		return nil, errors.New("not implemented")
+		return p.parseParenExpr()
 	}
 	return nil, errors.New("unexpected token")
+}
+
+func (p *parser) parseParenExpr() (ast.Expr, error) {
+	if p.tok.Kind != token.LPAREN {
+		return nil, fmt.Errorf("expected lparen, but got: %v", p.tok.Kind)
+	}
+	p.next()
+
+	expr, err := p.parseExpr()
+	if err != nil {
+		return nil, err
+	}
+
+	if p.tok.Kind != token.RPAREN {
+		return nil, fmt.Errorf("expected rparen, but got: %v", p.tok.Kind)
+	}
+	p.next()
+
+	return expr, nil
 }
