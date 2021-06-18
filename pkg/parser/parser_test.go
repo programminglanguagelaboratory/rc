@@ -15,50 +15,50 @@ func TestExpr(t *testing.T) {
 	}{
 		{
 			"10",
-			ast.LitExpr{Token: token.Token{Str: "10", Kind: token.NUMBER}},
+			ast.LitExpr{Token: token.Token{Text: "10", Kind: token.NUMBER}},
 		},
 		{
 			"10 + a",
 			ast.BinaryExpr{
-				Left:  ast.LitExpr{Token: token.Token{Str: "10", Kind: token.NUMBER}},
-				Right: ast.LitExpr{Token: token.Token{Str: "a", Kind: token.ID}},
-				Token: token.Token{Str: "+", Kind: token.PLUS},
+				Left:  ast.LitExpr{Token: token.Token{Text: "10", Kind: token.NUMBER}},
+				Right: ast.LitExpr{Token: token.Token{Text: "a", Kind: token.ID}},
+				Token: token.Token{Text: "+", Kind: token.PLUS},
 			},
 		},
 		{
 			"10 + 20 * 30",
 			ast.BinaryExpr{
-				Left: ast.LitExpr{Token: token.Token{Str: "10", Kind: token.NUMBER}},
+				Left: ast.LitExpr{Token: token.Token{Text: "10", Kind: token.NUMBER}},
 				Right: ast.BinaryExpr{
-					Left:  ast.LitExpr{Token: token.Token{Str: "20", Kind: token.NUMBER}},
-					Right: ast.LitExpr{Token: token.Token{Str: "30", Kind: token.NUMBER}},
-					Token: token.Token{Str: "*", Kind: token.ASTERISK},
+					Left:  ast.LitExpr{Token: token.Token{Text: "20", Kind: token.NUMBER}},
+					Right: ast.LitExpr{Token: token.Token{Text: "30", Kind: token.NUMBER}},
+					Token: token.Token{Text: "*", Kind: token.ASTERISK},
 				},
-				Token: token.Token{Str: "+", Kind: token.PLUS},
+				Token: token.Token{Text: "+", Kind: token.PLUS},
 			},
 		},
 		{
 			"(10 + 20) * 30",
 			ast.BinaryExpr{
 				Left: ast.BinaryExpr{
-					Left:  ast.LitExpr{Token: token.Token{Str: "10", Kind: token.NUMBER}},
-					Right: ast.LitExpr{Token: token.Token{Str: "20", Kind: token.NUMBER}},
-					Token: token.Token{Str: "+", Kind: token.PLUS},
+					Left:  ast.LitExpr{Token: token.Token{Text: "10", Kind: token.NUMBER}},
+					Right: ast.LitExpr{Token: token.Token{Text: "20", Kind: token.NUMBER}},
+					Token: token.Token{Text: "+", Kind: token.PLUS},
 				},
-				Right: ast.LitExpr{Token: token.Token{Str: "30", Kind: token.NUMBER}},
-				Token: token.Token{Str: "*", Kind: token.ASTERISK},
+				Right: ast.LitExpr{Token: token.Token{Text: "30", Kind: token.NUMBER}},
+				Token: token.Token{Text: "*", Kind: token.ASTERISK},
 			},
 		},
 		{
 			"10 - 20 - 30",
 			ast.BinaryExpr{
 				Left: ast.BinaryExpr{
-					Left:  ast.LitExpr{Token: token.Token{Str: "10", Kind: token.NUMBER}},
-					Right: ast.LitExpr{Token: token.Token{Str: "20", Kind: token.NUMBER}},
-					Token: token.Token{Str: "-", Kind: token.MINUS},
+					Left:  ast.LitExpr{Token: token.Token{Text: "10", Kind: token.NUMBER}},
+					Right: ast.LitExpr{Token: token.Token{Text: "20", Kind: token.NUMBER}},
+					Token: token.Token{Text: "-", Kind: token.MINUS},
 				},
-				Right: ast.LitExpr{Token: token.Token{Str: "30", Kind: token.NUMBER}},
-				Token: token.Token{Str: "-", Kind: token.MINUS},
+				Right: ast.LitExpr{Token: token.Token{Text: "30", Kind: token.NUMBER}},
+				Token: token.Token{Text: "-", Kind: token.MINUS},
 			},
 		},
 	} {

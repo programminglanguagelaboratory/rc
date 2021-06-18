@@ -2,7 +2,7 @@ package token
 
 // TODO: add position info
 type Token struct {
-	Str  string
+	Text string
 	Kind Kind
 }
 
@@ -47,5 +47,5 @@ func (k Kind) String() string {
 }
 
 func (token Token) String() string {
-	return token.Str
+	return token.Text
 }

@@ -47,7 +47,7 @@ func (l *Lexer) lexId() (token.Token, error) {
 		l.next()
 	}
 
-	return token.Token{Str: l.code[start:l.index], Kind: token.ID}, nil
+	return token.Token{Text: l.code[start:l.index], Kind: token.ID}, nil
 }
 
 func (l *Lexer) lexString() (token.Token, error) {
@@ -65,7 +65,7 @@ func (l *Lexer) lexString() (token.Token, error) {
 	}
 
 	l.next()
-	return token.Token{Str: l.code[start:l.index], Kind: token.STRING}, nil
+	return token.Token{Text: l.code[start:l.index], Kind: token.STRING}, nil
 }
 
 func (l *Lexer) lexNumber() (token.Token, error) {
@@ -75,7 +75,7 @@ func (l *Lexer) lexNumber() (token.Token, error) {
 		l.next()
 	}
 
-	return token.Token{Str: l.code[start:l.index], Kind: token.NUMBER}, nil
+	return token.Token{Text: l.code[start:l.index], Kind: token.NUMBER}, nil
 }
 
 func (l *Lexer) skipSpaces() {
@@ -99,31 +99,31 @@ func (l *Lexer) Lex() (token.Token, error) {
 
 	case l.ch == '+':
 		l.next()
-		return token.Token{Str: "+", Kind: token.PLUS}, nil
+		return token.Token{Text: "+", Kind: token.PLUS}, nil
 
 	case l.ch == '-':
 		l.next()
-		return token.Token{Str: "-", Kind: token.MINUS}, nil
+		return token.Token{Text: "-", Kind: token.MINUS}, nil
 
 	case l.ch == '*':
 		l.next()
-		return token.Token{Str: "*", Kind: token.ASTERISK}, nil
+		return token.Token{Text: "*", Kind: token.ASTERISK}, nil
 
 	case l.ch == '/':
 		l.next()
-		return token.Token{Str: "/", Kind: token.SLASH}, nil
+		return token.Token{Text: "/", Kind: token.SLASH}, nil
 
 	case l.ch == '.':
 		l.next()
-		return token.Token{Str: ".", Kind: token.DOT}, nil
+		return token.Token{Text: ".", Kind: token.DOT}, nil
 
 	case l.ch == '(':
 		l.next()
-		return token.Token{Str: "(", Kind: token.LPAREN}, nil
+		return token.Token{Text: "(", Kind: token.LPAREN}, nil
 
 	case l.ch == ')':
 		l.next()
-		return token.Token{Str: ")", Kind: token.RPAREN}, nil
+		return token.Token{Text: ")", Kind: token.RPAREN}, nil
 
 	case l.ch == EOF:
 		return token.Token{Kind: token.EOF}, nil
