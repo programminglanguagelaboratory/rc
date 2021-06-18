@@ -2,6 +2,7 @@ package lexer
 
 import (
 	"errors"
+	"fmt"
 	"unicode"
 
 	"github.com/programminglanguagelaboratory/rc/pkg/token"
@@ -129,5 +130,5 @@ func (l *Lexer) Lex() (token.Token, error) {
 		return token.Token{Kind: token.EOF}, nil
 	}
 
-	return token.Token{Text: "BAD"}, errors.New("not implemented")
+	return token.Token{}, fmt.Errorf("unexpected rune: %q", l.ch)
 }
