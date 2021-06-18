@@ -129,5 +129,5 @@ func (l *Lexer) Lex() (token.Token, error) {
 		return token.Token{Kind: token.EOF}, nil
 	}
 
-	return token.Token{}, errors.New("not implemented")
+	return token.Token{Text: "BAD"}, errors.New("not implemented")
 }
