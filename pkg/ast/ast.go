@@ -6,13 +6,13 @@ type Expr interface{}
 
 type Id string
 
-type BinOpExpr struct {
+type BinaryExpr struct {
 	Left  Expr
 	Right Expr
 	Token token.Token
 }
 
-type UnOpExpr struct {
+type UnaryExpr struct {
 	Left  Expr
 	Token token.Token
 }

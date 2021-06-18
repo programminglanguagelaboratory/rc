@@ -19,7 +19,7 @@ func TestExpr(t *testing.T) {
 		},
 		{
 			"10 + a",
-			ast.BinOpExpr{
+			ast.BinaryExpr{
 				Left:  ast.LitExpr{Token: token.Token{Str: "10", Kind: token.NUMBER}},
 				Right: ast.LitExpr{Token: token.Token{Str: "a", Kind: token.ID}},
 				Token: token.Token{Str: "+", Kind: token.PLUS},
@@ -27,9 +27,9 @@ func TestExpr(t *testing.T) {
 		},
 		{
 			"10 + 20 * 30",
-			ast.BinOpExpr{
+			ast.BinaryExpr{
 				Left: ast.LitExpr{Token: token.Token{Str: "10", Kind: token.NUMBER}},
-				Right: ast.BinOpExpr{
+				Right: ast.BinaryExpr{
 					Left:  ast.LitExpr{Token: token.Token{Str: "20", Kind: token.NUMBER}},
 					Right: ast.LitExpr{Token: token.Token{Str: "30", Kind: token.NUMBER}},
 					Token: token.Token{Str: "*", Kind: token.ASTERISK},
@@ -39,8 +39,8 @@ func TestExpr(t *testing.T) {
 		},
 		{
 			"(10 + 20) * 30",
-			ast.BinOpExpr{
-				Left: ast.BinOpExpr{
+			ast.BinaryExpr{
+				Left: ast.BinaryExpr{
 					Left:  ast.LitExpr{Token: token.Token{Str: "10", Kind: token.NUMBER}},
 					Right: ast.LitExpr{Token: token.Token{Str: "20", Kind: token.NUMBER}},
 					Token: token.Token{Str: "+", Kind: token.PLUS},
@@ -51,8 +51,8 @@ func TestExpr(t *testing.T) {
 		},
 		{
 			"10 - 20 - 30",
-			ast.BinOpExpr{
-				Left: ast.BinOpExpr{
+			ast.BinaryExpr{
+				Left: ast.BinaryExpr{
 					Left:  ast.LitExpr{Token: token.Token{Str: "10", Kind: token.NUMBER}},
 					Right: ast.LitExpr{Token: token.Token{Str: "20", Kind: token.NUMBER}},
 					Token: token.Token{Str: "-", Kind: token.MINUS},
