@@ -9,7 +9,7 @@ import (
 )
 
 type parser struct {
-	lexer lexer.Lexer
+	lexer *lexer.Lexer
 	tok   token.Token
 }
 
@@ -21,7 +21,8 @@ func (p *parser) next() {
 // TODO: handle Lex error
 func newParser(l *lexer.Lexer) *parser {
 	p := parser{}
-	p.tok, _ = l.Lex()
+	p.lexer = l
+	p.tok, _ = p.lexer.Lex()
 	return &p
 }
 
