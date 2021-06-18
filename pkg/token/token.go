@@ -46,6 +46,10 @@ func (k Kind) String() string {
 	return kinds[k]
 }
 
-func (token Token) String() string {
-	return token.Text
+func (t Token) String() string {
+	switch t.Kind {
+	case ID, STRING, NUMBER:
+		return t.Text
+	}
+	return t.Kind.String()
 }

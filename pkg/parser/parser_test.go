@@ -62,8 +62,13 @@ func TestExpr(t *testing.T) {
 			},
 		},
 	} {
-		actual, _ := newParser(lexer.NewLexer(testcase.code)).parseExpr()
-		if testcase.expected != actual {
+		actual, err := newParser(lexer.NewLexer(testcase.code)).parseExpr()
+		if err != nil {
+			t.Errorf("given %v, expected %v, but got an error: %v",
+				testcase.code,
+				testcase.expected,
+				err)
+		} else if testcase.expected != actual {
 			t.Errorf(
 				"given %v, expected %v, but got actual %v",
 				testcase.code,

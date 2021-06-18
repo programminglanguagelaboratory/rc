@@ -27,8 +27,14 @@ func TestToken(t *testing.T) {
 
 		{"", token.Token{Kind: token.EOF}},
 	} {
-		actual, _ := NewLexer(testcase.code).Lex()
-		if testcase.expected != actual {
+		actual, err := NewLexer(testcase.code).Lex()
+		if err != nil {
+			t.Errorf("given %v, expected %v, but got an error: %v",
+				testcase.code,
+				testcase.expected,
+				err,
+			)
+		} else if testcase.expected != actual {
 			t.Errorf(
 				"given %v, expected %v, but got actual %v",
 				testcase.code,
