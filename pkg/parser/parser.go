@@ -28,7 +28,31 @@ func newParser(l *lexer.Lexer) *parser {
 }
 
 func (p *parser) parseExpr() (ast.Expr, error) {
-	return p.parsePrimaryExpr()
+	return p.parseBinaryExpr(1)
+}
+
+func (p *parser) parseBinaryExpr(prevPrec int) (ast.Expr, error) {
+	left, err := p.parsePrimaryExpr()
+	if err != nil {
+		return nil, err
+	}
+
+	for {
+		prec := p.tok.Kind.GetPrec()
+		if prec < prevPrec {
+			return left, nil
+		}
+
+		tok := p.tok
+		p.next()
+
+		right, err := p.parseBinaryExpr(prec + 1)
+		if err != nil {
+			return nil, err
+		}
+
+		left = ast.BinaryExpr{Left: left, Right: right, Token: tok}
+	}
 }
 
 func (p *parser) parsePrimaryExpr() (ast.Expr, error) {
