@@ -46,6 +46,18 @@ func (k Kind) String() string {
 	return kinds[k]
 }
 
+func (k Kind) GetPrec() int {
+	switch k {
+	case PLUS, MINUS:
+		return 10
+
+	case ASTERISK, SLASH:
+		return 11
+	}
+
+	return 0
+}
+
 func (t Token) String() string {
 	switch t.Kind {
 	case ID, STRING, NUMBER:
