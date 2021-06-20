@@ -6,40 +6,42 @@ type Token struct {
 	Kind Kind
 }
 
+func (t Token) String() string {
+	switch t.Kind {
+	case ID, STRING, NUMBER:
+		return t.Text
+	}
+	return t.Kind.String()
+}
+
 type Kind int
 
 const (
 	ID = iota
 	STRING
 	NUMBER
-
 	PLUS
 	MINUS
 	ASTERISK
 	SLASH
-
 	DOT
 	LPAREN
 	RPAREN
-
 	EOF
 )
 
 var kinds = [...]string{
-	ID:     "ID",
-	STRING: "STRING",
-	NUMBER: "NUMBER",
-
+	ID:       "ID",
+	STRING:   "STRING",
+	NUMBER:   "NUMBER",
 	PLUS:     "+",
 	MINUS:    "-",
 	ASTERISK: "*",
 	SLASH:    "/",
-
-	DOT:    ".",
-	LPAREN: "(",
-	RPAREN: ")",
-
-	EOF: "EOF",
+	DOT:      ".",
+	LPAREN:   "(",
+	RPAREN:   ")",
+	EOF:      "EOF",
 }
 
 func (k Kind) String() string {
@@ -54,12 +56,4 @@ func (k Kind) GetPrec() int {
 		return 2
 	}
 	return -1
-}
-
-func (t Token) String() string {
-	switch t.Kind {
-	case ID, STRING, NUMBER:
-		return t.Text
-	}
-	return t.Kind.String()
 }
