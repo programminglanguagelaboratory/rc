@@ -28,7 +28,7 @@ func newParser(l *lexer.Lexer) *parser {
 }
 
 func (p *parser) parseExpr() (ast.Expr, error) {
-	return p.parseBinaryExpr(1)
+	return p.parseBinaryExpr(0)
 }
 
 func (p *parser) parseBinaryExpr(prevPrec int) (ast.Expr, error) {

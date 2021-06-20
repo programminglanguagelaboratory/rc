@@ -49,13 +49,11 @@ func (k Kind) String() string {
 func (k Kind) GetPrec() int {
 	switch k {
 	case PLUS, MINUS:
-		return 10
-
+		return 1
 	case ASTERISK, SLASH:
-		return 11
+		return 2
 	}
-
-	return 0
+	return -1
 }
 
 func (t Token) String() string {
