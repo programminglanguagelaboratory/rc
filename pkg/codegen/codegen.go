@@ -26,12 +26,18 @@ func NewCodegen() *Codegen {
 	return &c
 }
 
-func (c *Codegen) genExpr(e *ast.Expr) interface{} {
-	return errors.New("not implemented")
+func (c *Codegen) genExpr(e *ast.Expr) value.Value {
+	switch v := interface{}(e).(type) {
+	case *ast.BinaryExpr:
+		return c.genBinaryExpr(v)
+	case *ast.LitExpr:
+		return c.genLitExpr(v)
+	}
+	return nil
 }
 
-func (c *Codegen) genBinaryExpr(e *ast.BinaryExpr) interface{} {
-	return errors.New("not implemented")
+func (c *Codegen) genBinaryExpr(e *ast.BinaryExpr) value.Value {
+	return nil
 }
 
 func (c *Codegen) genUnaryExpr(e *ast.UnaryExpr) interface{} {
