@@ -26,20 +26,20 @@ func NewCodegen() *Codegen {
 	return &c
 }
 
-func (c *Codegen) genExpr(e *ast.Expr) value.Value {
+func (c *Codegen) genExpr(e ast.Expr) value.Value {
 	switch v := interface{}(e).(type) {
-	case *ast.BinaryExpr:
+	case ast.BinaryExpr:
 		return c.genBinaryExpr(v)
-	case *ast.LitExpr:
+	case ast.LitExpr:
 		return c.genLitExpr(v)
 	}
 	return nil
 }
 
-func (c *Codegen) genBinaryExpr(e *ast.BinaryExpr) value.Value {
+func (c *Codegen) genBinaryExpr(e ast.BinaryExpr) value.Value {
 	t := e.Token
-	left := c.genExpr(&e.Left)
-	right := c.genExpr(&e.Right)
+	left := c.genExpr(e.Left)
+	right := c.genExpr(e.Right)
 
 	switch t.Kind {
 	case token.PLUS:
@@ -55,19 +55,19 @@ func (c *Codegen) genBinaryExpr(e *ast.BinaryExpr) value.Value {
 	return nil
 }
 
-func (c *Codegen) genUnaryExpr(e *ast.UnaryExpr) interface{} {
+func (c *Codegen) genUnaryExpr(e ast.UnaryExpr) interface{} {
 	return errors.New("not implemented")
 }
 
-func (c *Codegen) genCallExpr(e *ast.CallExpr) interface{} {
+func (c *Codegen) genCallExpr(e ast.CallExpr) interface{} {
 	return errors.New("not implemented")
 }
 
-func (c *Codegen) genFieldExpr(e *ast.FieldExpr) interface{} {
+func (c *Codegen) genFieldExpr(e ast.FieldExpr) interface{} {
 	return errors.New("not implemented")
 }
 
-func (c *Codegen) genLitExpr(e *ast.LitExpr) value.Value {
+func (c *Codegen) genLitExpr(e ast.LitExpr) value.Value {
 	t := e.Token
 
 	switch t.Kind {
