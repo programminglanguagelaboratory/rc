@@ -26,6 +26,12 @@ func NewCodegen() *Codegen {
 	return &c
 }
 
+func (c *Codegen) Gen(e ast.Expr) *ir.Module {
+	ret := c.genExpr(e)
+	c.blk.NewRet(ret)
+	return c.mod
+}
+
 func (c *Codegen) genExpr(e ast.Expr) value.Value {
 	switch v := interface{}(e).(type) {
 	case ast.BinaryExpr:

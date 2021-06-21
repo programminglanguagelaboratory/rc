@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/programminglanguagelaboratory/rc/pkg/codegen"
 	"github.com/programminglanguagelaboratory/rc/pkg/lexer"
 	"github.com/programminglanguagelaboratory/rc/pkg/parser"
 )
@@ -26,5 +27,9 @@ func main() {
 			continue
 		}
 		fmt.Printf("< ast: %v\n", ast)
+
+		codegen := codegen.NewCodegen()
+		ir := codegen.Gen(ast)
+		fmt.Printf("< ir: %v\n", ir)
 	}
 }
