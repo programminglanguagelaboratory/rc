@@ -23,26 +23,26 @@ func NewCodegen() *Codegen {
 	return &c
 }
 
-func (c *Codegen) EmitExpr(e *ast.Expr) interface{} {
+func (c *Codegen) genExpr(e *ast.Expr) interface{} {
 	return errors.New("not implemented")
 }
 
-func (c *Codegen) EmitBinaryExpr(e *ast.BinaryExpr) interface{} {
+func (c *Codegen) genBinaryExpr(e *ast.BinaryExpr) interface{} {
 	return errors.New("not implemented")
 }
 
-func (c *Codegen) EmitUnaryExpr(e *ast.UnaryExpr) interface{} {
+func (c *Codegen) genUnaryExpr(e *ast.UnaryExpr) interface{} {
 	return errors.New("not implemented")
 }
 
-func (c *Codegen) EmitCallExpr(e *ast.CallExpr) interface{} {
+func (c *Codegen) genCallExpr(e *ast.CallExpr) interface{} {
 	return errors.New("not implemented")
 }
 
-func (c *Codegen) EmitFieldExpr(e *ast.FieldExpr) interface{} {
+func (c *Codegen) genFieldExpr(e *ast.FieldExpr) interface{} {
 	return errors.New("not implemented")
 }
 
-func (c *Codegen) EmitLitExpr(e *ast.LitExpr) interface{} {
+func (c *Codegen) genLitExpr(e *ast.LitExpr) interface{} {
 	return errors.New("not implemented")
 }
