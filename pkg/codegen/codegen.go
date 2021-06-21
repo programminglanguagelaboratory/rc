@@ -4,9 +4,12 @@ import (
 	"errors"
 
 	"github.com/llir/llvm/ir"
+	"github.com/llir/llvm/ir/constant"
 	"github.com/llir/llvm/ir/types"
+	"github.com/llir/llvm/ir/value"
 
 	"github.com/programminglanguagelaboratory/rc/pkg/ast"
+	"github.com/programminglanguagelaboratory/rc/pkg/token"
 )
 
 type Codegen struct {
@@ -43,6 +46,14 @@ func (c *Codegen) genFieldExpr(e *ast.FieldExpr) interface{} {
 	return errors.New("not implemented")
 }
 
-func (c *Codegen) genLitExpr(e *ast.LitExpr) interface{} {
-	return errors.New("not implemented")
+func (c *Codegen) genLitExpr(e *ast.LitExpr) value.Value {
+	t := e.Token
+
+	switch t.Kind {
+	case token.NUMBER:
+		val, _ := constant.NewIntFromString(types.I64, t.Text)
+		return val
+	}
+
+	return nil
 }
