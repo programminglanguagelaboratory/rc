@@ -37,6 +37,21 @@ func (c *Codegen) genExpr(e *ast.Expr) value.Value {
 }
 
 func (c *Codegen) genBinaryExpr(e *ast.BinaryExpr) value.Value {
+	t := e.Token
+	left := c.genExpr(&e.Left)
+	right := c.genExpr(&e.Right)
+
+	switch t.Kind {
+	case token.PLUS:
+		return c.blk.NewAdd(left, right)
+	case token.MINUS:
+		return c.blk.NewSub(left, right)
+	case token.ASTERISK:
+		return c.blk.NewMul(left, right)
+	case token.SLASH:
+		return c.blk.NewSDiv(left, right)
+	}
+
 	return nil
 }
 
