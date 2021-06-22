@@ -41,17 +41,27 @@ const (
 )
 
 var kinds = [...]string{
-	ID:       "ID",
-	STRING:   "STRING",
-	NUMBER:   "NUMBER",
-	PLUS:     "+",
-	MINUS:    "-",
-	ASTERISK: "*",
-	SLASH:    "/",
-	DOT:      ".",
-	LPAREN:   "(",
-	RPAREN:   ")",
-	EOF:      "EOF",
+	ID:                 "ID",
+	STRING:             "STRING",
+	NUMBER:             "NUMBER",
+	BOOL:               "BOOL",
+	PLUS:               "+",
+	MINUS:              "-",
+	ASTERISK:           "*",
+	SLASH:              "/",
+	GREATERTHAN:        ">",
+	GREATERTHANEQUALS:  ">=",
+	LESSTHAN:           "<",
+	LESSTHANEQUALS:     "<=",
+	EQUALSEQUALS:       "==",
+	EXCLAMATIONEQUALS:  "!=",
+	EXCLAMATION:        "!",
+	AMPERSANDAMPERSAND: "&&",
+	BARBAR:             "||",
+	DOT:                ".",
+	LPAREN:             "(",
+	RPAREN:             ")",
+	EOF:                "EOF",
 }
 
 func (k Kind) String() string {
@@ -60,10 +70,22 @@ func (k Kind) String() string {
 
 func (k Kind) GetPrec() int {
 	switch k {
-	case PLUS, MINUS:
+	case BARBAR:
 		return 1
-	case ASTERISK, SLASH:
+	case AMPERSANDAMPERSAND:
 		return 2
+	case
+		GREATERTHAN,
+		GREATERTHANEQUALS,
+		LESSTHAN,
+		LESSTHANEQUALS,
+		EQUALSEQUALS,
+		EXCLAMATIONEQUALS:
+		return 3
+	case PLUS, MINUS:
+		return 4
+	case ASTERISK, SLASH:
+		return 5
 	}
 	return -1
 }
