@@ -41,11 +41,18 @@ func (l *Lexer) next() {
 	l.ch = []rune(l.code)[l.index]
 }
 
-func (l *Lexer) lexId() (token.Token, error) {
+func (l *Lexer) lexIdOrBool() (token.Token, error) {
 	start := l.index
-
 	for l.ch != EOF && unicode.IsLetter(l.ch) {
 		l.next()
+	}
+	str := l.code[start:l.index]
+
+	switch str {
+	case "false":
+		return token.Token{Text: "false", Kind: token.BOOL}, nil
+	case "true":
+		return token.Token{Text: "true", Kind: token.BOOL}, nil
 	}
 
 	return token.Token{Text: l.code[start:l.index], Kind: token.ID}, nil
@@ -96,7 +103,7 @@ func (l *Lexer) Lex() (token.Token, error) {
 		return l.lexString()
 
 	case unicode.IsLetter(l.ch):
-		return l.lexId()
+		return l.lexIdOrBool()
 
 	case l.ch == '+':
 		l.next()
