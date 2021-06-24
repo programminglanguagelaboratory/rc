@@ -114,6 +114,66 @@ func (l *Lexer) Lex() (token.Token, error) {
 		l.next()
 		return token.Token{Text: "/", Kind: token.SLASH}, nil
 
+	case l.ch == '>':
+		l.next()
+
+		if l.ch == '=' {
+			l.next()
+			return token.Token{Text: ">=", Kind: token.GREATERTHANEQUALS}, nil
+		}
+
+		return token.Token{Text: ">", Kind: token.GREATERTHAN}, nil
+
+	case l.ch == '<':
+		l.next()
+
+		if l.ch == '=' {
+			l.next()
+			return token.Token{Text: "<=", Kind: token.LESSTHANEQUALS}, nil
+		}
+
+		return token.Token{Text: "<", Kind: token.LESSTHAN}, nil
+
+	case l.ch == '=':
+		l.next()
+
+		if l.ch == '=' {
+			l.next()
+			return token.Token{Text: "==", Kind: token.EQUALSEQUALS}, nil
+		}
+
+		return token.Token{}, fmt.Errorf("unexpected rune: %q", l.ch)
+
+	case l.ch == '!':
+		l.next()
+
+		if l.ch == '=' {
+			l.next()
+			return token.Token{Text: "!=", Kind: token.EXCLAMATIONEQUALS}, nil
+		}
+
+		return token.Token{Text: "!", Kind: token.EXCLAMATION}, nil
+
+	case l.ch == '&':
+		l.next()
+
+		if l.ch == '&' {
+			l.next()
+			return token.Token{Text: "&&", Kind: token.AMPERSANDAMPERSAND}, nil
+		}
+
+		return token.Token{}, fmt.Errorf("unexpected rune: %q", l.ch)
+
+	case l.ch == '|':
+		l.next()
+
+		if l.ch == '|' {
+			l.next()
+			return token.Token{Text: "||", Kind: token.BARBAR}, nil
+		}
+
+		return token.Token{}, fmt.Errorf("unexpected rune: %q", l.ch)
+
 	case l.ch == '.':
 		l.next()
 		return token.Token{Text: ".", Kind: token.DOT}, nil
