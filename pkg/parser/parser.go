@@ -59,7 +59,7 @@ func (p *Parser) parseBinaryExpr(prevPrec int) (ast.Expr, error) {
 
 func (p *Parser) parsePrimaryExpr() (ast.Expr, error) {
 	switch p.tok.Kind {
-	case token.ID, token.STRING, token.NUMBER:
+	case token.ID, token.STRING, token.NUMBER, token.BOOL:
 		t := ast.LitExpr{Token: p.tok}
 		p.next()
 		return t, nil
