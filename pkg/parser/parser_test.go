@@ -69,7 +69,7 @@ func TestExpr(t *testing.T) {
 					Left:  ast.LitExpr{Token: token.Token{Text: "20", Kind: token.NUMBER}},
 					Token: token.Token{Text: "-", Kind: token.MINUS},
 				},
-				Token: token.Token{Text: "==", Kind: token.EQUALSEQUALS},
+				Token: token.Token{Text: "-", Kind: token.MINUS},
 			},
 		},
 		{
