@@ -79,6 +79,36 @@ func TestExpr(t *testing.T) {
 				Token: token.Token{Text: "!", Kind: token.EXCLAMATION},
 			},
 		},
+		{
+			"f(10)",
+			ast.CallExpr{
+				Func: ast.LitExpr{Token: token.Token{Text: "f", Kind: token.ID}},
+				Args: []ast.Expr{
+					ast.LitExpr{Token: token.Token{Text: "10", Kind: token.NUMBER}},
+				},
+			},
+		},
+		{
+			"f.x",
+			ast.FieldExpr{
+				Left:  ast.LitExpr{Token: token.Token{Text: "f", Kind: token.ID}},
+				Right: "x",
+			},
+		},
+		{
+			"x.f().g()",
+			ast.CallExpr{
+				Func: ast.FieldExpr{
+					Left: ast.CallExpr{
+						Func: ast.FieldExpr{
+							Left:  ast.LitExpr{Token: token.Token{Text: "x", Kind: token.ID}},
+							Right: "f",
+						},
+					},
+					Right: "g",
+				},
+			},
+		},
 	} {
 		actual, err := NewParser(lexer.NewLexer(testcase.code)).parseExpr()
 		if err != nil {
