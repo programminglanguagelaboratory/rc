@@ -8,7 +8,7 @@ type Token struct {
 
 func (t Token) String() string {
 	switch t.Kind {
-	case ID, STRING, NUMBER:
+	case ID, STRING, NUMBER, BOOL:
 		return t.Text
 	}
 	return t.Kind.String()
