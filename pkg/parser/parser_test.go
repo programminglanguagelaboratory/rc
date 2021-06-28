@@ -61,6 +61,24 @@ func TestExpr(t *testing.T) {
 				Token: token.Token{Text: "-", Kind: token.MINUS},
 			},
 		},
+		{
+			"10 - -20",
+			ast.BinaryExpr{
+				Left: ast.LitExpr{Token: token.Token{Text: "10", Kind: token.NUMBER}},
+				Right: ast.UnaryExpr{
+					Left:  ast.LitExpr{Token: token.Token{Text: "20", Kind: token.NUMBER}},
+					Token: token.Token{Text: "-", Kind: token.MINUS},
+				},
+				Token: token.Token{Text: "==", Kind: token.EQUALSEQUALS},
+			},
+		},
+		{
+			"!false",
+			ast.UnaryExpr{
+				Left:  ast.LitExpr{Token: token.Token{Text: "false", Kind: token.BOOL}},
+				Token: token.Token{Text: "!", Kind: token.EXCLAMATION},
+			},
+		},
 	} {
 		actual, err := NewParser(lexer.NewLexer(testcase.code)).parseExpr()
 		if err != nil {
