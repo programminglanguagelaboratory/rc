@@ -34,7 +34,7 @@ func (p *Parser) parseExpr() (ast.Expr, error) {
 }
 
 func (p *Parser) parseBinaryExpr(prevPrec int) (ast.Expr, error) {
-	left, err := p.parsePrimaryExpr()
+	left, err := p.parseUnaryExpr()
 	if err != nil {
 		return nil, err
 	}
@@ -67,6 +67,29 @@ func (p *Parser) parsePrimaryExpr() (ast.Expr, error) {
 		return p.parseParenExpr()
 	}
 	return nil, errors.New("unexpected token")
+}
+
+func (p *Parser) parseUnaryExpr() (ast.Expr, error) {
+	switch p.tok.Kind {
+	case token.MINUS, token.EXCLAMATION:
+		t := ast.UnaryExpr{Token: p.tok}
+		p.next()
+
+		left, err := p.parseUnaryExpr()
+		if err != nil {
+			return nil, err
+		}
+
+		t.Left = left
+		return t, nil
+	}
+
+	left, err := p.parsePrimaryExpr()
+	if err != nil {
+		return nil, err
+	}
+
+	return left, nil
 }
 
 func (p *Parser) parseParenExpr() (ast.Expr, error) {
