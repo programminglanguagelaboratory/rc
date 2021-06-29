@@ -72,12 +72,59 @@ func (p *Parser) parseUnaryExpr() (ast.Expr, error) {
 		return t, nil
 	}
 
-	left, err := p.parseLitOrParenExpr()
+	left, err := p.parsePrimaryExpr()
 	if err != nil {
 		return nil, err
 	}
 
 	return left, nil
+}
+
+func (p *Parser) parsePrimaryExpr() (ast.Expr, error) {
+	expr, err := p.parseLitOrParenExpr()
+	if err != nil {
+		return nil, err
+	}
+
+	switch p.tok.Kind {
+	case token.LPAREN:
+		return p.parseCallExpr(expr)
+	}
+
+	return expr, nil
+}
+
+func (p *Parser) parseCallExpr(func_ ast.Expr) (ast.Expr, error) {
+	if p.tok.Kind != token.LPAREN {
+		return nil, fmt.Errorf("expected lparen, but got: %v", p.tok.Kind)
+	}
+	p.next()
+
+	args := []ast.Expr{}
+	for p.tok.Kind != token.RPAREN {
+		arg, err := p.parseExpr()
+		if err != nil {
+			return nil, err
+		}
+		args = append(args, arg)
+
+		if p.tok.Kind == token.RPAREN {
+			break
+		}
+
+		if p.tok.Kind != token.COMMA {
+			return nil, fmt.Errorf("expected comma, but got: %v", p.tok.Kind)
+		}
+		p.next()
+	}
+	expr := ast.CallExpr{Func: func_, Args: args}
+
+	if p.tok.Kind != token.RPAREN {
+		return nil, fmt.Errorf("expected rparen, but got: %v", p.tok.Kind)
+	}
+	p.next()
+
+	return expr, nil
 }
 
 func (p *Parser) parseLitOrParenExpr() (ast.Expr, error) {
