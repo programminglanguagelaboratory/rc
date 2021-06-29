@@ -185,6 +185,10 @@ func (l *Lexer) Lex() (token.Token, error) {
 		l.next()
 		return token.Token{Text: ".", Kind: token.DOT}, nil
 
+	case l.ch == ',':
+		l.next()
+		return token.Token{Text: ",", Kind: token.COMMA}, nil
+
 	case l.ch == '(':
 		l.next()
 		return token.Token{Text: "(", Kind: token.LPAREN}, nil

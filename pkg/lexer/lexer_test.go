@@ -35,6 +35,7 @@ func TestToken(t *testing.T) {
 		{"||", token.Token{Text: "||", Kind: token.BARBAR}},
 
 		{".", token.Token{Text: ".", Kind: token.DOT}},
+		{",", token.Token{Text: ",", Kind: token.COMMA}},
 		{"(", token.Token{Text: "(", Kind: token.LPAREN}},
 		{")", token.Token{Text: ")", Kind: token.RPAREN}},
 
