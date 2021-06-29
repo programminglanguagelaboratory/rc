@@ -1,6 +1,7 @@
 package parser
 
 import (
+	"reflect"
 	"testing"
 
 	"github.com/programminglanguagelaboratory/rc/pkg/ast"
@@ -116,7 +117,9 @@ func TestExpr(t *testing.T) {
 				testcase.code,
 				testcase.expected,
 				err)
-		} else if testcase.expected != actual {
+		}
+
+		if !reflect.DeepEqual(testcase.expected, actual) {
 			t.Errorf(
 				"given %v, expected %v, but got actual %v",
 				testcase.code,
