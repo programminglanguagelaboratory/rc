@@ -35,6 +35,7 @@ const (
 	AMPERSANDAMPERSAND
 	BARBAR
 	DOT
+	COMMA
 	LPAREN
 	RPAREN
 	EOF
@@ -59,6 +60,7 @@ var kinds = [...]string{
 	AMPERSANDAMPERSAND: "&&",
 	BARBAR:             "||",
 	DOT:                ".",
+	COMMA:              ",",
 	LPAREN:             "(",
 	RPAREN:             ")",
 	EOF:                "EOF",
