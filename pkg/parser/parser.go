@@ -89,6 +89,8 @@ func (p *Parser) parsePrimaryExpr() (ast.Expr, error) {
 	switch p.tok.Kind {
 	case token.LPAREN:
 		return p.parseCallExpr(expr)
+	case token.DOT:
+		return p.parseFieldExpr(expr)
 	}
 
 	return expr, nil
@@ -125,6 +127,21 @@ func (p *Parser) parseCallExpr(func_ ast.Expr) (ast.Expr, error) {
 	p.next()
 
 	return expr, nil
+}
+
+func (p *Parser) parseFieldExpr(left ast.Expr) (ast.Expr, error) {
+	if p.tok.Kind != token.DOT {
+		return nil, fmt.Errorf("expected dot, but got: %v", p.tok.Kind)
+	}
+	p.next()
+
+	right := p.tok.Text
+	if p.tok.Kind != token.ID {
+		return nil, fmt.Errorf("expected id, but got: %v", p.tok.Kind)
+	}
+	p.next()
+
+	return ast.FieldExpr{Left: left, Right: ast.Id(right)}, nil
 }
 
 func (p *Parser) parseLitOrParenExpr() (ast.Expr, error) {
