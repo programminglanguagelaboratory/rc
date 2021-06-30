@@ -39,6 +39,8 @@ func TestToken(t *testing.T) {
 		{"(", token.Token{Text: "(", Kind: token.LPAREN}},
 		{")", token.Token{Text: ")", Kind: token.RPAREN}},
 
+		{"fn", token.Token{Text: "fn", Kind: token.FN}},
+
 		{"", token.Token{Kind: token.EOF}},
 	} {
 		actual, err := NewLexer(testcase.code).Lex()

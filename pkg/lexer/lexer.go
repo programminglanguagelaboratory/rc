@@ -53,6 +53,8 @@ func (l *Lexer) lexIdOrBool() (token.Token, error) {
 		return token.Token{Text: "false", Kind: token.BOOL}, nil
 	case "true":
 		return token.Token{Text: "true", Kind: token.BOOL}, nil
+	case "fn":
+		return token.Token{Text: "fn", Kind: token.FN}, nil
 	}
 
 	return token.Token{Text: l.code[start:l.index], Kind: token.ID}, nil
