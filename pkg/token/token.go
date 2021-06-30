@@ -38,6 +38,7 @@ const (
 	COMMA
 	LPAREN
 	RPAREN
+	FN
 	EOF
 )
 
@@ -63,6 +64,7 @@ var kinds = [...]string{
 	COMMA:              ",",
 	LPAREN:             "(",
 	RPAREN:             ")",
+	FN:                 "fn",
 	EOF:                "EOF",
 }
 
