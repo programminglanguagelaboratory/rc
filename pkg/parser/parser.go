@@ -113,7 +113,7 @@ func (p *Parser) parseCallExpr(func_ ast.Expr) (ast.Expr, error) {
 	}
 	p.next()
 
-	args := []ast.Expr{}
+	var args []ast.Expr
 	for p.tok.Kind != token.RPAREN {
 		arg, err := p.parseExpr()
 		if err != nil {
