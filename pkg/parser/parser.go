@@ -86,11 +86,22 @@ func (p *Parser) parsePrimaryExpr() (ast.Expr, error) {
 		return nil, err
 	}
 
-	switch p.tok.Kind {
-	case token.LPAREN:
-		return p.parseCallExpr(expr)
-	case token.DOT:
-		return p.parseFieldExpr(expr)
+L:
+	for {
+		switch p.tok.Kind {
+		case token.LPAREN:
+			expr, err = p.parseCallExpr(expr)
+			if err != nil {
+				return nil, err
+			}
+		case token.DOT:
+			expr, err = p.parseFieldExpr(expr)
+			if err != nil {
+				return nil, err
+			}
+		default:
+			break L
+		}
 	}
 
 	return expr, nil
