@@ -110,6 +110,23 @@ func TestExpr(t *testing.T) {
 				},
 			},
 		},
+		{
+			"a := 10; a",
+			ast.DeclExpr{
+				Decl: ast.Id("a"),
+				Body: ast.LitExpr{Token: token.Token{Text: "a", Kind: token.ID}},
+			},
+		},
+		{
+			"a := 10; b := 10; a",
+			ast.DeclExpr{
+				Decl: ast.Id("a"),
+				Body: ast.DeclExpr{
+					Decl: ast.Id("b"),
+					Body: ast.LitExpr{Token: token.Token{Text: "a", Kind: token.ID}},
+				},
+			},
+		},
 	} {
 		actual, err := NewParser(lexer.NewLexer(testcase.code)).parseExpr()
 		if err != nil {
