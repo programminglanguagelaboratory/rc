@@ -17,6 +17,11 @@ type Field struct {
 	Name Id
 }
 
+type DeclExpr struct {
+	Decl Id
+	Body Expr
+}
+
 type BinaryExpr struct {
 	Left  Expr
 	Right Expr
