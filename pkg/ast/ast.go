@@ -2,12 +2,6 @@ package ast
 
 import "github.com/programminglanguagelaboratory/rc/pkg/token"
 
-type Stmt interface{}
-
-type BlockStmt struct {
-	Stmts []Stmt
-}
-
 type Expr interface{}
 
 type Id string
@@ -51,5 +45,5 @@ type FuncLitExpr struct {
 	Name   Id
 	Params []Field
 	Typ    Id
-	Body   BlockStmt
+	Body   Expr
 }
