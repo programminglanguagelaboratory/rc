@@ -199,6 +199,16 @@ func (l *Lexer) Lex() (token.Token, error) {
 		l.next()
 		return token.Token{Text: ")", Kind: token.RPAREN}, nil
 
+	case l.ch == ':':
+		l.next()
+
+		if l.ch == '=' {
+			l.next()
+			return token.Token{Text: ":=", Kind: token.COLONEQUALS}, nil
+		}
+
+		return token.Token{}, fmt.Errorf("unexpected rune: %q", l.ch)
+
 	case l.ch == ';':
 		l.next()
 		return token.Token{Text: ";", Kind: token.SEMICOLON}, nil
