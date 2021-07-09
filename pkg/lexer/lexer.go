@@ -199,6 +199,10 @@ func (l *Lexer) Lex() (token.Token, error) {
 		l.next()
 		return token.Token{Text: ")", Kind: token.RPAREN}, nil
 
+	case l.ch == ';':
+		l.next()
+		return token.Token{Text: ";", Kind: token.SEMICOLON}, nil
+
 	case l.ch == EOF:
 		return token.Token{Kind: token.EOF}, nil
 	}
