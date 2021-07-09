@@ -39,6 +39,8 @@ const (
 	LPAREN
 	RPAREN
 	FN
+	COLONEQUALS
+	SEMICOLON
 	EOF
 )
 
@@ -65,6 +67,8 @@ var kinds = [...]string{
 	LPAREN:             "(",
 	RPAREN:             ")",
 	FN:                 "fn",
+	COLONEQUALS:        ":=",
+	SEMICOLON:          ";",
 	EOF:                "EOF",
 }
 
