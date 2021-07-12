@@ -12,8 +12,9 @@ type Field struct {
 }
 
 type DeclExpr struct {
-	Name Id
-	Body Expr
+	Name  Id
+	Value Expr
+	Body  Expr
 }
 
 type BinaryExpr struct {

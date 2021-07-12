@@ -113,17 +113,20 @@ func TestExpr(t *testing.T) {
 		{
 			"a := 10; a",
 			ast.DeclExpr{
-				Name: ast.Id("a"),
-				Body: ast.LitExpr{Token: token.Token{Text: "a", Kind: token.ID}},
+				Name:  ast.Id("a"),
+				Value: ast.LitExpr{Token: token.Token{Text: "10", Kind: token.NUMBER}},
+				Body:  ast.LitExpr{Token: token.Token{Text: "a", Kind: token.ID}},
 			},
 		},
 		{
 			"a := 10; b := 10; a",
 			ast.DeclExpr{
-				Name: ast.Id("a"),
+				Name:  ast.Id("a"),
+				Value: ast.LitExpr{Token: token.Token{Text: "10", Kind: token.NUMBER}},
 				Body: ast.DeclExpr{
-					Name: ast.Id("b"),
-					Body: ast.LitExpr{Token: token.Token{Text: "a", Kind: token.ID}},
+					Name:  ast.Id("b"),
+					Value: ast.LitExpr{Token: token.Token{Text: "10", Kind: token.NUMBER}},
+					Body:  ast.LitExpr{Token: token.Token{Text: "a", Kind: token.ID}},
 				},
 			},
 		},
