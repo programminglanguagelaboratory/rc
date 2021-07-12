@@ -30,7 +30,50 @@ func (p *Parser) Parse() (ast.Expr, error) {
 }
 
 func (p *Parser) parseExpr() (ast.Expr, error) {
-	return p.parseBinaryExpr(0)
+	expr, err := p.parseBinaryExpr(0)
+	if err != nil {
+		return nil, err
+	}
+
+	if p.tok.Kind == token.COLONEQUALS {
+		return p.parseDeclExpr(expr)
+	}
+
+	return expr, nil
+}
+
+func (p *Parser) parseDeclExpr(name ast.Expr) (ast.Expr, error) {
+	var ok bool
+	var l ast.LitExpr
+	if l, ok = name.(ast.LitExpr); !ok {
+		return nil, fmt.Errorf("expected lhs, but got: %v", p.tok.Kind)
+	}
+	if l.Token.Kind != token.ID {
+		return nil, fmt.Errorf("expected lhs, but got: %v", p.tok.Kind)
+	}
+	id := ast.Id(l.Token.Text)
+
+	if p.tok.Kind != token.COLONEQUALS {
+		return nil, fmt.Errorf("expected :=, but got: %v", p.tok.Kind)
+	}
+	p.next()
+
+	value, err := p.parseExpr()
+	if err != nil {
+		return nil, err
+	}
+
+	if p.tok.Kind != token.SEMICOLON {
+		return nil, fmt.Errorf("expected ;, but got: %v", p.tok.Kind)
+	}
+	p.next()
+
+	body, err := p.parseExpr()
+	if err != nil {
+		return nil, err
+	}
+
+	return ast.DeclExpr{Name: id, Value: value, Body: body}, nil
 }
 
 func (p *Parser) parseBinaryExpr(prevPrec int) (ast.Expr, error) {
