@@ -12,7 +12,7 @@ type Field struct {
 }
 
 type DeclExpr struct {
-	Decl Id
+	Name Id
 	Body Expr
 }
 
