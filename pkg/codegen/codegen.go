@@ -13,9 +13,10 @@ import (
 )
 
 type Codegen struct {
-	mod *ir.Module
-	fun *ir.Func
-	blk *ir.Block
+	mod   *ir.Module
+	fun   *ir.Func
+	blk   *ir.Block
+	decls map[ast.Id]value.Value
 }
 
 func NewCodegen() *Codegen {
@@ -23,6 +24,7 @@ func NewCodegen() *Codegen {
 	c.mod = ir.NewModule()
 	c.fun = c.mod.NewFunc("", types.I64)
 	c.blk = c.fun.NewBlock("")
+	c.decls = make(map[ast.Id]value.Value)
 	return &c
 }
 
@@ -34,12 +36,19 @@ func (c *Codegen) Gen(e ast.Expr) *ir.Module {
 
 func (c *Codegen) genExpr(e ast.Expr) value.Value {
 	switch v := interface{}(e).(type) {
+	case ast.DeclExpr:
+		return c.genDeclExpr(v)
 	case ast.BinaryExpr:
 		return c.genBinaryExpr(v)
 	case ast.LitExpr:
 		return c.genLitExpr(v)
 	}
 	return nil
+}
+
+func (c *Codegen) genDeclExpr(e ast.DeclExpr) value.Value {
+	c.decls[e.Name] = c.genExpr(e.Value)
+	return c.genExpr(e.Body)
 }
 
 func (c *Codegen) genBinaryExpr(e ast.BinaryExpr) value.Value {
