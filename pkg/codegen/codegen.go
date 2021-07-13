@@ -87,11 +87,10 @@ func (c *Codegen) genLitExpr(e ast.LitExpr) value.Value {
 
 	switch t.Kind {
 	case token.NUMBER:
-		val, _ := constant.NewIntFromString(types.I64, t.Text)
-		return val
+		v, _ := constant.NewIntFromString(types.I64, t.Text)
+		return v
 	case token.ID:
-		value := c.decls[ast.Id(t.Text)]
-		return value
+		return c.decls[ast.Id(t.Text)]
 	}
 
 	return nil
