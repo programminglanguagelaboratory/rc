@@ -2,7 +2,6 @@ package typ
 
 type Typ interface{}
 
-const (
-	STRING = iota
-	NUMBER
-)
+type String struct{}
+type Number struct{}
+type Bool struct{}
