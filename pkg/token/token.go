@@ -1,6 +1,5 @@
 package token
 
-// TODO: add position info
 type Token struct {
 	Text string
 	Kind Kind
