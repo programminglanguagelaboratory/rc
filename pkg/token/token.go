@@ -17,7 +17,7 @@ func (t Token) String() string {
 type Kind int
 
 const (
-	ID = iota
+	ID Kind = iota
 	STRING
 	NUMBER
 	BOOL
