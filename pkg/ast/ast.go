@@ -43,8 +43,7 @@ type LitExpr struct {
 }
 
 type FuncLitExpr struct {
-	Name   Id
-	Params []Field
-	Typ    Id
-	Body   Expr
+	Name  Id
+	Param Expr
+	Body  Expr
 }
