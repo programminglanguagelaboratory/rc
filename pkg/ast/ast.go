@@ -30,7 +30,7 @@ type UnaryExpr struct {
 
 type CallExpr struct {
 	Func Expr
-	Args []Expr
+	Arg  Expr
 }
 
 type FieldExpr struct {

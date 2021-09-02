@@ -150,36 +150,23 @@ L:
 	return expr, nil
 }
 
-func (p *Parser) parseCallExpr(func_ ast.Expr) (ast.Expr, error) {
+func (p *Parser) parseCallExpr(f ast.Expr) (ast.Expr, error) {
 	if p.tok.Kind != token.LPAREN {
 		return nil, fmt.Errorf("expected lparen, but got: %v", p.tok.Kind)
 	}
 	p.next()
 
-	var args []ast.Expr
-	for p.tok.Kind != token.RPAREN {
-		arg, err := p.parseExpr()
-		if err != nil {
-			return nil, err
-		}
-		args = append(args, arg)
-
-		if p.tok.Kind == token.RPAREN {
-			break
-		}
-
-		if p.tok.Kind != token.COMMA {
-			return nil, fmt.Errorf("expected comma, but got: %v", p.tok.Kind)
-		}
-		p.next()
+	x, err := p.parseExpr()
+	if err != nil {
+		return nil, err
 	}
-	expr := ast.CallExpr{Func: func_, Args: args}
 
 	if p.tok.Kind != token.RPAREN {
 		return nil, fmt.Errorf("expected rparen, but got: %v", p.tok.Kind)
 	}
 	p.next()
 
+	expr := ast.CallExpr{Func: f, Arg: x}
 	return expr, nil
 }
 
