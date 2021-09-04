@@ -113,14 +113,27 @@ func (p *Parser) parseUnaryExpr() (ast.Expr, error) {
 
 		t.Left = left
 		return t, nil
+	default:
+		return p.parseCallExpr()
 	}
+}
 
-	left, err := p.parsePrimaryExpr()
+func (p *Parser) parseCallExpr() (ast.Expr, error) {
+	x, err := p.parsePrimaryExpr()
 	if err != nil {
 		return nil, err
 	}
 
-	return left, nil
+	for {
+		y, err := p.parsePrimaryExpr()
+		if err != nil {
+			break
+		}
+
+		x = ast.CallExpr{Func: x, Arg: y}
+	}
+
+	return x, nil
 }
 
 func (p *Parser) parsePrimaryExpr() (ast.Expr, error) {
@@ -132,11 +145,6 @@ func (p *Parser) parsePrimaryExpr() (ast.Expr, error) {
 L:
 	for {
 		switch p.tok.Kind {
-		case token.LPAREN:
-			expr, err = p.parseCallExpr(expr)
-			if err != nil {
-				return nil, err
-			}
 		case token.DOT:
 			expr, err = p.parseFieldExpr(expr)
 			if err != nil {
@@ -147,26 +155,6 @@ L:
 		}
 	}
 
-	return expr, nil
-}
-
-func (p *Parser) parseCallExpr(f ast.Expr) (ast.Expr, error) {
-	if p.tok.Kind != token.LPAREN {
-		return nil, fmt.Errorf("expected lparen, but got: %v", p.tok.Kind)
-	}
-	p.next()
-
-	x, err := p.parseExpr()
-	if err != nil {
-		return nil, err
-	}
-
-	if p.tok.Kind != token.RPAREN {
-		return nil, fmt.Errorf("expected rparen, but got: %v", p.tok.Kind)
-	}
-	p.next()
-
-	expr := ast.CallExpr{Func: f, Arg: x}
 	return expr, nil
 }
 
