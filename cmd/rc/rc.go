@@ -29,7 +29,11 @@ func main() {
 		fmt.Printf("< ast: %v\n", ast)
 
 		codegen := codegen.NewCodegen()
-		ir := codegen.Gen(ast)
+		ir, err := codegen.Gen(ast)
+		if err != nil {
+			fmt.Println(err)
+			continue
+		}
 		fmt.Printf("< ir: %v\n", ir)
 	}
 }

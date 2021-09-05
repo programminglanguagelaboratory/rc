@@ -28,13 +28,17 @@ func NewCodegen() *Codegen {
 	return &c
 }
 
-func (c *Codegen) Gen(e ast.Expr) *ir.Module {
-	ret := c.genExpr(e)
+func (c *Codegen) Gen(e ast.Expr) (*ir.Module, error) {
+	ret, err := c.genExpr(e)
+	if err != nil {
+		return nil, err
+	}
+
 	c.blk.NewRet(ret)
-	return c.mod
+	return c.mod, nil
 }
 
-func (c *Codegen) genExpr(e ast.Expr) value.Value {
+func (c *Codegen) genExpr(e ast.Expr) (value.Value, error) {
 	switch v := interface{}(e).(type) {
 	case ast.DeclExpr:
 		return c.genDeclExpr(v)
@@ -43,55 +47,67 @@ func (c *Codegen) genExpr(e ast.Expr) value.Value {
 	case ast.LitExpr:
 		return c.genLitExpr(v)
 	}
-	return nil
+	return nil, errors.New("now implemented")
 }
 
-func (c *Codegen) genDeclExpr(e ast.DeclExpr) value.Value {
-	c.decls[e.Name] = c.genExpr(e.Value)
+func (c *Codegen) genDeclExpr(e ast.DeclExpr) (value.Value, error) {
+	var err error
+	c.decls[e.Name], err = c.genExpr(e.Value)
+	if err != nil {
+		return nil, err
+	}
+
 	return c.genExpr(e.Body)
 }
 
-func (c *Codegen) genBinaryExpr(e ast.BinaryExpr) value.Value {
-	t := e.Token
-	left := c.genExpr(e.Left)
-	right := c.genExpr(e.Right)
-
-	switch t.Kind {
-	case token.PLUS:
-		return c.blk.NewAdd(left, right)
-	case token.MINUS:
-		return c.blk.NewSub(left, right)
-	case token.ASTERISK:
-		return c.blk.NewMul(left, right)
-	case token.SLASH:
-		return c.blk.NewSDiv(left, right)
+func (c *Codegen) genBinaryExpr(e ast.BinaryExpr) (value.Value, error) {
+	left, err := c.genExpr(e.Left)
+	if err != nil {
+		return nil, err
 	}
 
-	return nil
+	right, err := c.genExpr(e.Right)
+	if err != nil {
+		return nil, err
+	}
+
+	t := e.Token
+	switch t.Kind {
+	case token.PLUS:
+		return c.blk.NewAdd(left, right), nil
+	case token.MINUS:
+		return c.blk.NewSub(left, right), nil
+	case token.ASTERISK:
+		return c.blk.NewMul(left, right), nil
+	case token.SLASH:
+		return c.blk.NewSDiv(left, right), nil
+	}
+
+	return nil, errors.New("not implemented")
 }
 
-func (c *Codegen) genUnaryExpr(e ast.UnaryExpr) interface{} {
-	return errors.New("not implemented")
+func (c *Codegen) genUnaryExpr(e ast.UnaryExpr) (value.Value, error) {
+	return nil, errors.New("not implemented")
 }
 
-func (c *Codegen) genCallExpr(e ast.CallExpr) interface{} {
-	return errors.New("not implemented")
+func (c *Codegen) genCallExpr(e ast.CallExpr) (value.Value, error) {
+	return nil, errors.New("not implemented")
 }
 
-func (c *Codegen) genFieldExpr(e ast.FieldExpr) interface{} {
-	return errors.New("not implemented")
+func (c *Codegen) genFieldExpr(e ast.FieldExpr) (value.Value, error) {
+	return nil, errors.New("not implemented")
 }
 
-func (c *Codegen) genLitExpr(e ast.LitExpr) value.Value {
+func (c *Codegen) genLitExpr(e ast.LitExpr) (value.Value, error) {
 	t := e.Token
 
 	switch t.Kind {
 	case token.NUMBER:
 		v, _ := constant.NewIntFromString(types.I64, t.Text)
-		return v
+		return v, nil
 	case token.ID:
-		return c.decls[ast.Id(t.Text)]
+		return c.decls[ast.Id(t.Text)], nil
 	}
 
-	return nil
+	return nil, errors.New("not implemented")
 }
