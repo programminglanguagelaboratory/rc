@@ -91,7 +91,7 @@ func (c *Codegen) genUnaryExpr(e ast.UnaryExpr) (value.Value, error) {
 }
 
 func (c *Codegen) genCallExpr(e ast.CallExpr) (value.Value, error) {
-	return nil, errors.New("not implemented")
+	return nil, errors.New("genCallExpr: not implemented")
 }
 
 func (c *Codegen) genFieldExpr(e ast.FieldExpr) (value.Value, error) {
@@ -103,10 +103,13 @@ func (c *Codegen) genLitExpr(e ast.LitExpr) (value.Value, error) {
 
 	switch t.Kind {
 	case token.NUMBER:
-		v, _ := constant.NewIntFromString(types.I64, t.Text)
-		return v, nil
+		return constant.NewIntFromString(types.I64, t.Text)
 	case token.ID:
-		return c.decls[ast.Id(t.Text)], nil
+		v, ok := c.decls[ast.Id(t.Text)]
+		if !ok {
+			return nil, errors.New("undefined variable: " + t.Text)
+		}
+		return v, nil
 	}
 
 	return nil, errors.New("not implemented")
