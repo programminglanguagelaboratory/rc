@@ -91,6 +91,23 @@ func TestExpr(t *testing.T) {
 			},
 		},
 		{
+			"- f 10 + g 20",
+			ast.BinaryExpr{
+				Left: ast.UnaryExpr{
+					Left: ast.CallExpr{
+						Func: ast.LitExpr{Token: token.Token{Text: "f", Kind: token.ID}},
+						Arg:  ast.LitExpr{Token: token.Token{Text: "10", Kind: token.NUMBER}},
+					},
+					Token: token.Token{Text: "-", Kind: token.MINUS},
+				},
+				Right: ast.CallExpr{
+					Func: ast.LitExpr{Token: token.Token{Text: "g", Kind: token.ID}},
+					Arg:  ast.LitExpr{Token: token.Token{Text: "20", Kind: token.NUMBER}},
+				},
+				Token: token.Token{Text: "+", Kind: token.PLUS},
+			},
+		},
+		{
 			"f.x",
 			ast.FieldExpr{
 				Left:  ast.LitExpr{Token: token.Token{Text: "f", Kind: token.ID}},
