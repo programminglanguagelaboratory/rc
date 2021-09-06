@@ -47,7 +47,7 @@ func (c *Codegen) genExpr(e ast.Expr) (value.Value, error) {
 	case ast.LitExpr:
 		return c.genLitExpr(v)
 	}
-	return nil, errors.New("now implemented")
+	return nil, errors.New("not implemented")
 }
 
 func (c *Codegen) genDeclExpr(e ast.DeclExpr) (value.Value, error) {
