@@ -22,8 +22,8 @@ type Codegen struct {
 func NewCodegen() *Codegen {
 	c := Codegen{}
 	c.mod = ir.NewModule()
-	c.fun = c.mod.NewFunc("", types.I64)
-	c.blk = c.fun.NewBlock("")
+	c.fun = c.mod.NewFunc("main", types.I64)
+	c.blk = c.fun.NewBlock("entry")
 	c.decls = make(map[ast.Id]value.Value)
 	return &c
 }
