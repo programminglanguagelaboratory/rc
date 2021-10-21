@@ -7,6 +7,10 @@ import (
 
 type Table map[symbol.Symbol]typ.Typ
 
+func NewTable() Table {
+	return make(Table)
+}
+
 func (t *Table) FindType(s symbol.Symbol) (typ.Typ, bool) {
 	typ, ok := (*t)[s]
 	return typ, ok
