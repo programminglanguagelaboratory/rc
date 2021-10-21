@@ -6,3 +6,8 @@ import (
 )
 
 type Table map[symbol.Symbol]typ.Typ
+
+func (t *Table) FindType(s symbol.Symbol) (typ.Typ, bool) {
+	typ, ok := (*t)[s]
+	return typ, ok
+}
