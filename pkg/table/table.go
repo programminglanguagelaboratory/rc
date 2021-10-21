@@ -5,8 +5,17 @@ import (
 	"github.com/programminglanguagelaboratory/rc/pkg/typ"
 )
 
+var lastIndex = 0
+
 type Symbol struct {
-	Tok token.Token
+	Tok   token.Token
+	Index int
+}
+
+func newSymbol(t token.Token) Symbol {
+	s := Symbol{Tok: t, Index: lastIndex}
+	lastIndex++
+	return s
 }
 
 type Table map[Symbol]typ.Typ
