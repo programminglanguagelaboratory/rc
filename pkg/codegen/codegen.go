@@ -44,8 +44,14 @@ func (c *Codegen) genExpr(e ast.Expr) (value.Value, error) {
 		return c.genDeclExpr(v)
 	case ast.BinaryExpr:
 		return c.genBinaryExpr(v)
-	case ast.LitExpr:
-		return c.genLitExpr(v)
+	case ast.IdentExpr:
+		value, ok := c.decls[ast.Id(v.Value)]
+		if !ok {
+			return nil, errors.New("undefined variable: " + v.Value)
+		}
+		return value, nil
+	case ast.NumberExpr:
+		return constant.NewInt(types.I64, v.Value), nil
 	}
 	return nil, errors.New("not implemented")
 }
@@ -95,22 +101,5 @@ func (c *Codegen) genCallExpr(e ast.CallExpr) (value.Value, error) {
 }
 
 func (c *Codegen) genFieldExpr(e ast.FieldExpr) (value.Value, error) {
-	return nil, errors.New("not implemented")
-}
-
-func (c *Codegen) genLitExpr(e ast.LitExpr) (value.Value, error) {
-	t := e.Token
-
-	switch t.Kind {
-	case token.NUMBER:
-		return constant.NewIntFromString(types.I64, t.Text)
-	case token.ID:
-		v, ok := c.decls[ast.Id(t.Text)]
-		if !ok {
-			return nil, errors.New("undefined variable: " + t.Text)
-		}
-		return v, nil
-	}
-
 	return nil, errors.New("not implemented")
 }

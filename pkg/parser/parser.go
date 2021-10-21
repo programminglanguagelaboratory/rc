@@ -3,6 +3,7 @@ package parser
 import (
 	"errors"
 	"fmt"
+	"strconv"
 
 	"github.com/programminglanguagelaboratory/rc/pkg/ast"
 	"github.com/programminglanguagelaboratory/rc/pkg/lexer"
@@ -44,8 +45,8 @@ func (p *Parser) parseExpr() (ast.Expr, error) {
 
 func (p *Parser) parseDeclExpr(name ast.Expr) (ast.Expr, error) {
 	var ok bool
-	var l ast.LitExpr
-	if l, ok = name.(ast.LitExpr); !ok {
+	var l ast.IdentExpr
+	if l, ok = name.(ast.IdentExpr); !ok {
 		return nil, fmt.Errorf("expected lhs, but got: %v", p.tok.Kind)
 	}
 	if l.Token.Kind != token.ID {
@@ -175,8 +176,22 @@ func (p *Parser) parseFieldExpr(left ast.Expr) (ast.Expr, error) {
 
 func (p *Parser) parseLitOrParenExpr() (ast.Expr, error) {
 	switch p.tok.Kind {
-	case token.ID, token.STRING, token.NUMBER, token.BOOL:
-		t := ast.LitExpr{Token: p.tok}
+	case token.ID:
+		t := ast.IdentExpr{Token: p.tok, Value: p.tok.Text}
+		p.next()
+		return t, nil
+	case token.STRING:
+		t := ast.StringExpr{Token: p.tok, Value: p.tok.Text}
+		p.next()
+		return t, nil
+	case token.NUMBER:
+		n, _ := strconv.ParseInt(p.tok.Text, 0, 64)
+		t := ast.NumberExpr{Token: p.tok, Value: n}
+		p.next()
+		return t, nil
+	case token.BOOL:
+		b, _ := strconv.ParseBool(p.tok.Text)
+		t := ast.BoolExpr{Token: p.tok, Value: b}
 		p.next()
 		return t, nil
 	case token.LPAREN:

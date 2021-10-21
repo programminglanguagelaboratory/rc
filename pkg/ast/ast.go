@@ -38,8 +38,24 @@ type FieldExpr struct {
 	Right Id
 }
 
-type LitExpr struct {
+type IdentExpr struct {
 	Token token.Token
+	Value string
+}
+
+type StringExpr struct {
+	Token token.Token
+	Value string
+}
+
+type NumberExpr struct {
+	Token token.Token
+	Value int64
+}
+
+type BoolExpr struct {
+	Token token.Token
+	Value bool
 }
 
 type FuncLitExpr struct {
