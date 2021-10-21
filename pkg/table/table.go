@@ -12,7 +12,7 @@ type Symbol struct {
 	Index int
 }
 
-func newSymbol(t token.Token) Symbol {
+func NewSymbol(t token.Token) Symbol {
 	s := Symbol{Tok: t, Index: lastIndex}
 	lastIndex++
 	return s
