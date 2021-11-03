@@ -25,10 +25,12 @@ func (t *Table) Resolve(id ast.Id) (typ.Typ, bool) {
 }
 
 func (t *Table) Define(id ast.Id, typ typ.Typ) *Table {
-	return &Table{
+	newTable := &Table{
 		Outer: t,
 		Inner: nil,
 		Id:    id,
 		Typ:   typ,
 	}
+	newTable.Outer.Inner = newTable
+	return newTable
 }
