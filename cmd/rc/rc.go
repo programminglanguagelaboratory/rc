@@ -19,7 +19,7 @@ func main() {
 		fmt.Printf("< code: %v\n", code)
 
 		lexer := lexer.NewLexer(code)
-		parser := parser.NewParser(lexer)
+		parser := parser.NewParser(lexer, nil)
 
 		ast, err := parser.Parse()
 		if err != nil {

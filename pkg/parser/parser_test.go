@@ -151,7 +151,7 @@ func TestExpr(t *testing.T) {
 			},
 		},
 	} {
-		actual, err := NewParser(lexer.NewLexer(testcase.code)).parseExpr()
+		actual, err := NewParser(lexer.NewLexer(testcase.code), nil).parseExpr()
 		if err != nil {
 			t.Errorf("given %v, expected %v, but got an error: %v",
 				testcase.code,

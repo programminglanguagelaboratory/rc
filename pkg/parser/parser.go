@@ -7,22 +7,25 @@ import (
 
 	"github.com/programminglanguagelaboratory/rc/pkg/ast"
 	"github.com/programminglanguagelaboratory/rc/pkg/lexer"
+	"github.com/programminglanguagelaboratory/rc/pkg/table"
 	"github.com/programminglanguagelaboratory/rc/pkg/token"
 )
 
 type Parser struct {
 	lexer *lexer.Lexer
 	tok   token.Token
+	table *table.Table
 }
 
 func (p *Parser) next() {
 	p.tok, _ = p.lexer.Lex()
 }
 
-func NewParser(l *lexer.Lexer) *Parser {
+func NewParser(l *lexer.Lexer, t *table.Table) *Parser {
 	p := Parser{}
 	p.lexer = l
 	p.tok, _ = p.lexer.Lex()
+	p.table = t
 	return &p
 }
 
