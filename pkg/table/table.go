@@ -1,34 +1,34 @@
 package table
 
 import (
-	"github.com/programminglanguagelaboratory/rc/pkg/token"
+	"github.com/programminglanguagelaboratory/rc/pkg/ast"
 	"github.com/programminglanguagelaboratory/rc/pkg/typ"
 )
 
-var lastIndex = 0
-
-type Symbol struct {
-	Tok   token.Token
-	Index int
+type Table struct {
+	Outer *Table
+	Inner *Table
+	Id    ast.Id
+	Typ   typ.Typ
 }
 
-func NewSymbol(t token.Token) Symbol {
-	s := Symbol{Tok: t, Index: lastIndex}
-	lastIndex++
-	return s
+func (t *Table) Resolve(id ast.Id) (typ.Typ, bool) {
+	if t.Id == id {
+		return t.Typ, true
+	}
+
+	if t.Outer == nil {
+		return nil, false
+	}
+
+	return t.Outer.Resolve(id)
 }
 
-type Table map[Symbol]typ.Typ
-
-func NewTable() Table {
-	return make(Table)
-}
-
-func (t *Table) FindType(s Symbol) (typ.Typ, bool) {
-	typ, ok := (*t)[s]
-	return typ, ok
-}
-
-func (t *Table) AddType(s Symbol, typ typ.Typ) {
-	(*t)[s] = typ
+func (t *Table) Define(id ast.Id, typ typ.Typ) *Table {
+	return &Table{
+		Outer: t,
+		Inner: nil,
+		Id:    id,
+		Typ:   typ,
+	}
 }
