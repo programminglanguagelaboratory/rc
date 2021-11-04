@@ -9,7 +9,6 @@ import (
 	"github.com/llir/llvm/ir/value"
 
 	"github.com/programminglanguagelaboratory/rc/pkg/ast"
-	"github.com/programminglanguagelaboratory/rc/pkg/token"
 )
 
 type Codegen struct {
@@ -40,10 +39,11 @@ func (c *Codegen) Gen(e ast.Expr) (*ir.Module, error) {
 
 func (c *Codegen) genExpr(e ast.Expr) (value.Value, error) {
 	switch v := interface{}(e).(type) {
+	case ast.BinaryExpr:
+	case ast.UnaryExpr:
+		return nil, errors.New("unexpected sugared expression")
 	case ast.DeclExpr:
 		return c.genDeclExpr(v)
-	case ast.BinaryExpr:
-		return c.genBinaryExpr(v)
 	case ast.IdentExpr:
 		value, ok := c.decls[ast.Id(v.Value)]
 		if !ok {
@@ -64,36 +64,6 @@ func (c *Codegen) genDeclExpr(e ast.DeclExpr) (value.Value, error) {
 	}
 
 	return c.genExpr(e.Body)
-}
-
-func (c *Codegen) genBinaryExpr(e ast.BinaryExpr) (value.Value, error) {
-	left, err := c.genExpr(e.Left)
-	if err != nil {
-		return nil, err
-	}
-
-	right, err := c.genExpr(e.Right)
-	if err != nil {
-		return nil, err
-	}
-
-	t := e.Token
-	switch t.Kind {
-	case token.PLUS:
-		return c.blk.NewAdd(left, right), nil
-	case token.MINUS:
-		return c.blk.NewSub(left, right), nil
-	case token.ASTERISK:
-		return c.blk.NewMul(left, right), nil
-	case token.SLASH:
-		return c.blk.NewSDiv(left, right), nil
-	}
-
-	return nil, errors.New("not implemented")
-}
-
-func (c *Codegen) genUnaryExpr(e ast.UnaryExpr) (value.Value, error) {
-	return nil, errors.New("not implemented")
 }
 
 func (c *Codegen) genCallExpr(e ast.CallExpr) (value.Value, error) {
