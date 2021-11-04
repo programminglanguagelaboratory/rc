@@ -6,6 +6,7 @@ import (
 	"os"
 
 	"github.com/programminglanguagelaboratory/rc/pkg/codegen"
+	"github.com/programminglanguagelaboratory/rc/pkg/desugar"
 	"github.com/programminglanguagelaboratory/rc/pkg/lexer"
 	"github.com/programminglanguagelaboratory/rc/pkg/parser"
 )
@@ -28,8 +29,14 @@ func main() {
 		}
 		fmt.Printf("< ast: %v\n", ast)
 
+		desugared := desugar.Desugar(ast)
+		if err != nil {
+			fmt.Println(err)
+			continue
+		}
+
 		codegen := codegen.NewCodegen()
-		ir, err := codegen.Gen(ast)
+		ir, err := codegen.Gen(desugared)
 		if err != nil {
 			fmt.Println(err)
 			continue
