@@ -3,6 +3,7 @@ package typcheck
 import (
 	"testing"
 
+	"github.com/programminglanguagelaboratory/rc/pkg/desugar"
 	"github.com/programminglanguagelaboratory/rc/pkg/lexer"
 	"github.com/programminglanguagelaboratory/rc/pkg/parser"
 	"github.com/programminglanguagelaboratory/rc/pkg/typ"
@@ -21,7 +22,8 @@ func TestInferExpr(t *testing.T) {
 				err)
 		}
 
-		actual, nil := Infer(expr)
+		desugared := desugar.Desugar(expr)
+		actual, nil := Infer(desugared)
 		if err != nil {
 			t.Errorf("given %v, expected %v, but got an error: %v",
 				testcase.code,
