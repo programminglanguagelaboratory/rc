@@ -156,7 +156,9 @@ func TestExpr(t *testing.T) {
 			t.Errorf("given %v, expected %v, but got an error: %v",
 				testcase.code,
 				testcase.expected,
-				err)
+				err,
+			)
+			continue
 		}
 
 		if !reflect.DeepEqual(testcase.expected, actual) {
