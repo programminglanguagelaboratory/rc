@@ -29,16 +29,20 @@ func TestInferExpr(t *testing.T) {
 			t.Errorf("given %v, expected %v, but got an error: %v",
 				testcase.code,
 				testcase.expected,
-				err)
+				err,
+			)
+			continue
 		}
 
 		desugared := desugar.Desugar(expr)
-		actual, nil := Infer(desugared)
+		actual, err := Infer(desugared)
 		if err != nil {
 			t.Errorf("given %v, expected %v, but got an error: %v",
 				testcase.code,
 				testcase.expected,
-				err)
+				err,
+			)
+			continue
 		}
 
 		if testcase.expected != actual {
