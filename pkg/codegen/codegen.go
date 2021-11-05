@@ -45,10 +45,11 @@ func (c *Codegen) genExpr(e ast.Expr) (value.Value, error) {
 	case ast.DeclExpr:
 		return c.genDeclExpr(v)
 	case ast.IdentExpr:
-		value, ok := c.decls[ast.Id(v.Value)]
+		p, ok := c.decls[ast.Id(v.Value)]
 		if !ok {
 			return nil, errors.New("undefined variable: " + v.Value)
 		}
+		value := c.blk.NewLoad(types.I64, p)
 		return value, nil
 	case ast.NumberExpr:
 		return constant.NewInt(types.I64, v.Value), nil
@@ -57,12 +58,14 @@ func (c *Codegen) genExpr(e ast.Expr) (value.Value, error) {
 }
 
 func (c *Codegen) genDeclExpr(e ast.DeclExpr) (value.Value, error) {
-	var err error
-	c.decls[e.Name], err = c.genExpr(e.Value)
+	value, err := c.genExpr(e.Value)
 	if err != nil {
 		return nil, err
 	}
 
+	p := c.blk.NewAlloca(types.I64)
+	c.blk.NewStore(value, p)
+	c.decls[e.Name] = p
 	return c.genExpr(e.Body)
 }
 
