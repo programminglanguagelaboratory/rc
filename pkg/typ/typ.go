@@ -8,11 +8,19 @@ type Typ interface {
 
 type StringTyp struct{}
 
+func NewString() *StringTyp {
+	return &StringTyp{}
+}
+
 func (t *StringTyp) String() string {
 	return "str"
 }
 
 type NumberTyp struct{}
+
+func NewNumber() *NumberTyp {
+	return &NumberTyp{}
+}
 
 func (t *NumberTyp) String() string {
 	return "num"
@@ -20,11 +28,19 @@ func (t *NumberTyp) String() string {
 
 type BoolTyp struct{}
 
+func NewBool() *BoolTyp {
+	return &BoolTyp{}
+}
+
 func (t *BoolTyp) String() string {
 	return "bool"
 }
 
 type FuncTyp struct{}
+
+func NewFunc() *FuncTyp {
+	return &FuncTyp{}
+}
 
 func (t *FuncTyp) String() string {
 	return "fn"
