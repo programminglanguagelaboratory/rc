@@ -6,26 +6,26 @@ type Typ interface {
 	fmt.Stringer
 }
 
-type String struct{}
+type StringTyp struct{}
 
-func (t *String) String() string {
+func (t *StringTyp) String() string {
 	return "str"
 }
 
-type Number struct{}
+type NumberTyp struct{}
 
-func (t *Number) String() string {
+func (t *NumberTyp) String() string {
 	return "num"
 }
 
-type Bool struct{}
+type BoolTyp struct{}
 
-func (t *Bool) String() string {
+func (t *BoolTyp) String() string {
 	return "bool"
 }
 
-type Func struct{}
+type FuncTyp struct{}
 
-func (t *Func) String() string {
+func (t *FuncTyp) String() string {
 	return "fn"
 }
