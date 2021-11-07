@@ -22,7 +22,7 @@ func TestInferExpr(t *testing.T) {
 		{"x := 10; y:= \"hello\"; x", typ.NewNumber()},
 		{"x := 10; \"hello\"", typ.NewString()},
 
-		{"10 + 20", typ.NewString()},
+		{"10 + 20", typ.NewNumber()},
 	} {
 		expr, err := parser.NewParser(lexer.NewLexer(testcase.code), nil).Parse()
 		if err != nil {
