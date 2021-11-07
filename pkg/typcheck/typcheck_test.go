@@ -14,15 +14,15 @@ func TestInferExpr(t *testing.T) {
 		code     string
 		expected typ.Typ
 	}{
-		{"\"hello\"", typ.String{}},
-		{"10", typ.Number{}},
-		{"true", typ.Bool{}},
+		{"\"hello\"", &typ.String{}},
+		{"10", &typ.Number{}},
+		{"true", &typ.Bool{}},
 
-		{"x := 10; x", typ.Number{}},
-		{"x := 10; y:= \"hello\"; x", typ.Number{}},
-		{"x := 10; \"hello\"", typ.String{}},
+		{"x := 10; x", &typ.Number{}},
+		{"x := 10; y:= \"hello\"; x", &typ.Number{}},
+		{"x := 10; \"hello\"", &typ.String{}},
 
-		{"10 + 20", typ.String{}},
+		{"10 + 20", &typ.String{}},
 	} {
 		expr, err := parser.NewParser(lexer.NewLexer(testcase.code), nil).Parse()
 		if err != nil {
