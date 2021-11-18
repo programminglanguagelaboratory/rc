@@ -20,9 +20,9 @@ func desugarBinaryExpr(e ast.BinaryExpr) ast.CallExpr {
 				Token: e.Token,
 				Value: e.Token.Text,
 			},
-			Arg: e.Left,
+			Arg: e.X,
 		},
-		Arg: e.Right,
+		Arg: e.Y,
 	}
 }
 
@@ -32,6 +32,6 @@ func desugarUnaryExpr(e ast.UnaryExpr) ast.CallExpr {
 			Token: e.Token,
 			Value: e.Token.Text,
 		},
-		Arg: e.Left,
+		Arg: e.X,
 	}
 }

@@ -10,11 +10,11 @@ import (
 
 func TestBinaryExpr(t *testing.T) {
 	expr := ast.BinaryExpr{
-		Left: ast.IdentExpr{
+		X: ast.IdentExpr{
 			Token: token.Token{Text: "a", Kind: token.ID},
 			Value: "a",
 		},
-		Right: ast.IdentExpr{
+		Y: ast.IdentExpr{
 			Token: token.Token{Text: "b", Kind: token.ID},
 			Value: "b",
 		},
@@ -49,7 +49,7 @@ func TestBinaryExpr(t *testing.T) {
 
 func TestUnaryExpr(t *testing.T) {
 	expr := ast.UnaryExpr{
-		Left: ast.IdentExpr{
+		X: ast.IdentExpr{
 			Token: token.Token{Text: "a", Kind: token.ID},
 			Value: "a",
 		},

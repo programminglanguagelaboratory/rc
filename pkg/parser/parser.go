@@ -100,7 +100,7 @@ func (p *Parser) parseBinaryExpr(prevPrec int) (ast.Expr, error) {
 			return nil, err
 		}
 
-		left = ast.BinaryExpr{Left: left, Right: right, Token: tok}
+		left = ast.BinaryExpr{X: left, Y: right, Token: tok}
 	}
 }
 
@@ -115,7 +115,7 @@ func (p *Parser) parseUnaryExpr() (ast.Expr, error) {
 			return nil, err
 		}
 
-		t.Left = left
+		t.X = left
 		return t, nil
 	default:
 		return p.parseCallExpr()

@@ -21,18 +21,18 @@ func TestExpr(t *testing.T) {
 		{
 			"10 + a",
 			ast.BinaryExpr{
-				Left:  ast.NumberExpr{Token: token.Token{Text: "10", Kind: token.NUMBER}, Value: 10},
-				Right: ast.IdentExpr{Token: token.Token{Text: "a", Kind: token.ID}, Value: "a"},
+				X:     ast.NumberExpr{Token: token.Token{Text: "10", Kind: token.NUMBER}, Value: 10},
+				Y:     ast.IdentExpr{Token: token.Token{Text: "a", Kind: token.ID}, Value: "a"},
 				Token: token.Token{Text: "+", Kind: token.PLUS},
 			},
 		},
 		{
 			"10 + 20 * 30",
 			ast.BinaryExpr{
-				Left: ast.NumberExpr{Token: token.Token{Text: "10", Kind: token.NUMBER}, Value: 10},
-				Right: ast.BinaryExpr{
-					Left:  ast.NumberExpr{Token: token.Token{Text: "20", Kind: token.NUMBER}, Value: 20},
-					Right: ast.NumberExpr{Token: token.Token{Text: "30", Kind: token.NUMBER}, Value: 30},
+				X: ast.NumberExpr{Token: token.Token{Text: "10", Kind: token.NUMBER}, Value: 10},
+				Y: ast.BinaryExpr{
+					X:     ast.NumberExpr{Token: token.Token{Text: "20", Kind: token.NUMBER}, Value: 20},
+					Y:     ast.NumberExpr{Token: token.Token{Text: "30", Kind: token.NUMBER}, Value: 30},
 					Token: token.Token{Text: "*", Kind: token.ASTERISK},
 				},
 				Token: token.Token{Text: "+", Kind: token.PLUS},
@@ -41,33 +41,33 @@ func TestExpr(t *testing.T) {
 		{
 			"(10 + 20) * 30",
 			ast.BinaryExpr{
-				Left: ast.BinaryExpr{
-					Left:  ast.NumberExpr{Token: token.Token{Text: "10", Kind: token.NUMBER}, Value: 10},
-					Right: ast.NumberExpr{Token: token.Token{Text: "20", Kind: token.NUMBER}, Value: 20},
+				X: ast.BinaryExpr{
+					X:     ast.NumberExpr{Token: token.Token{Text: "10", Kind: token.NUMBER}, Value: 10},
+					Y:     ast.NumberExpr{Token: token.Token{Text: "20", Kind: token.NUMBER}, Value: 20},
 					Token: token.Token{Text: "+", Kind: token.PLUS},
 				},
-				Right: ast.NumberExpr{Token: token.Token{Text: "30", Kind: token.NUMBER}, Value: 30},
+				Y:     ast.NumberExpr{Token: token.Token{Text: "30", Kind: token.NUMBER}, Value: 30},
 				Token: token.Token{Text: "*", Kind: token.ASTERISK},
 			},
 		},
 		{
 			"10 - 20 - 30",
 			ast.BinaryExpr{
-				Left: ast.BinaryExpr{
-					Left:  ast.NumberExpr{Token: token.Token{Text: "10", Kind: token.NUMBER}, Value: 10},
-					Right: ast.NumberExpr{Token: token.Token{Text: "20", Kind: token.NUMBER}, Value: 20},
+				X: ast.BinaryExpr{
+					X:     ast.NumberExpr{Token: token.Token{Text: "10", Kind: token.NUMBER}, Value: 10},
+					Y:     ast.NumberExpr{Token: token.Token{Text: "20", Kind: token.NUMBER}, Value: 20},
 					Token: token.Token{Text: "-", Kind: token.MINUS},
 				},
-				Right: ast.NumberExpr{Token: token.Token{Text: "30", Kind: token.NUMBER}, Value: 30},
+				Y:     ast.NumberExpr{Token: token.Token{Text: "30", Kind: token.NUMBER}, Value: 30},
 				Token: token.Token{Text: "-", Kind: token.MINUS},
 			},
 		},
 		{
 			"10 - -20",
 			ast.BinaryExpr{
-				Left: ast.NumberExpr{Token: token.Token{Text: "10", Kind: token.NUMBER}, Value: 10},
-				Right: ast.UnaryExpr{
-					Left:  ast.NumberExpr{Token: token.Token{Text: "20", Kind: token.NUMBER}, Value: 20},
+				X: ast.NumberExpr{Token: token.Token{Text: "10", Kind: token.NUMBER}, Value: 10},
+				Y: ast.UnaryExpr{
+					X:     ast.NumberExpr{Token: token.Token{Text: "20", Kind: token.NUMBER}, Value: 20},
 					Token: token.Token{Text: "-", Kind: token.MINUS},
 				},
 				Token: token.Token{Text: "-", Kind: token.MINUS},
@@ -76,7 +76,7 @@ func TestExpr(t *testing.T) {
 		{
 			"!false",
 			ast.UnaryExpr{
-				Left:  ast.BoolExpr{Token: token.Token{Text: "false", Kind: token.BOOL}, Value: false},
+				X:     ast.BoolExpr{Token: token.Token{Text: "false", Kind: token.BOOL}, Value: false},
 				Token: token.Token{Text: "!", Kind: token.EXCLAMATION},
 			},
 		},
@@ -93,14 +93,14 @@ func TestExpr(t *testing.T) {
 		{
 			"- f 10 + g 20",
 			ast.BinaryExpr{
-				Left: ast.UnaryExpr{
-					Left: ast.CallExpr{
+				X: ast.UnaryExpr{
+					X: ast.CallExpr{
 						Func: ast.IdentExpr{Token: token.Token{Text: "f", Kind: token.ID}, Value: "f"},
 						Arg:  ast.NumberExpr{Token: token.Token{Text: "10", Kind: token.NUMBER}, Value: 10},
 					},
 					Token: token.Token{Text: "-", Kind: token.MINUS},
 				},
-				Right: ast.CallExpr{
+				Y: ast.CallExpr{
 					Func: ast.IdentExpr{Token: token.Token{Text: "g", Kind: token.ID}, Value: "g"},
 					Arg:  ast.NumberExpr{Token: token.Token{Text: "20", Kind: token.NUMBER}, Value: 20},
 				},

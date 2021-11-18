@@ -18,13 +18,13 @@ type DeclExpr struct {
 }
 
 type BinaryExpr struct {
-	Left  Expr
-	Right Expr
+	X     Expr
+	Y     Expr
 	Token token.Token
 }
 
 type UnaryExpr struct {
-	Left  Expr
+	X     Expr
 	Token token.Token
 }
 
