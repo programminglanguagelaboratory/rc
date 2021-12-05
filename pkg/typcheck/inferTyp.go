@@ -42,9 +42,10 @@ type funcTyp struct {
 }
 
 func (t *funcTyp) Apply(s Subst) Substitutable {
-	t.from = t.from.Apply(s).(inferTyp)
-	t.to = t.to.Apply(s).(inferTyp)
-	return Substitutable(t)
+	return Substitutable(&funcTyp{
+		from: t.from.Apply(s).(inferTyp),
+		to:   t.to.Apply(s).(inferTyp),
+	})
 }
 func (t *funcTyp) inferType()     {}
 func (t *funcTyp) String() string { return t.from.String() + " -> " + t.to.String() }
