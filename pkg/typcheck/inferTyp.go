@@ -12,19 +12,19 @@ type inferTyp interface {
 	inferType()
 }
 
-type varType struct {
+type varTyp struct {
 	tv string
 }
 
-func (t *varType) Apply(s Subst) Substitutable {
+func (t *varTyp) Apply(s Subst) Substitutable {
 	c, ok := map[string]typ.Typ(s)[t.tv]
 	if !ok {
 		return Substitutable(t)
 	}
 	return Substitutable(&constTyp{t: c})
 }
-func (t *varType) String() string { return t.tv }
-func (t *varType) inferType()     {}
+func (t *varTyp) String() string { return t.tv }
+func (t *varTyp) inferType()     {}
 
 type constTyp struct {
 	t typ.Typ
