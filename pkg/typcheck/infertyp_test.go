@@ -60,8 +60,15 @@ func TestFreeTypeVars(t *testing.T) {
 			[]string{"a", "b"},
 		},
 	} {
-		actual := testcase.t.FreeTypeVars()
-		if !reflect.DeepEqual(testcase.expected, actual) {
+		actual := make(map[string]struct{})
+		for _, tv := range testcase.t.FreeTypeVars() {
+			actual[tv] = struct{}{}
+		}
+		expected := make(map[string]struct{})
+		for _, tv := range testcase.expected {
+			expected[tv] = struct{}{}
+		}
+		if !reflect.DeepEqual(expected, actual) {
 			t.Errorf(
 				"given %v, expected %v, but got actual %v",
 				testcase.t,
