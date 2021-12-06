@@ -7,6 +7,18 @@ import (
 	"github.com/programminglanguagelaboratory/rc/pkg/typ"
 )
 
+type context struct {
+	Substitutable
+}
+
+func (c *context) Apply() Substitutable {
+	panic("not impl")
+}
+
+func (c *context) FreeTypeVars() Substitutable {
+	panic("not impl")
+}
+
 func Infer(e ast.Expr) (typ.Typ, error) {
 	return inferExpr(e)
 }
