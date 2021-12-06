@@ -17,4 +17,5 @@ func composeSubst(x, y Subst) Subst {
 
 type Substitutable interface {
 	Apply(Subst) Substitutable
+	FreeTypeVars() []string
 }
