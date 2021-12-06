@@ -41,3 +41,33 @@ func TestApply(t *testing.T) {
 		}
 	}
 }
+
+func TestFreeTypeVars(t *testing.T) {
+	for _, testcase := range []struct {
+		t        inferTyp
+		expected []string
+	}{
+		{
+			inferTyp(&varTyp{tv: "a"}),
+			[]string{"a"},
+		},
+		{
+			inferTyp(&constTyp{t: typ.NewBool()}),
+			nil,
+		},
+		{
+			inferTyp(&funcTyp{from: &varTyp{tv: "a"}, to: &varTyp{tv: "b"}}),
+			[]string{"a", "b"},
+		},
+	} {
+		actual := testcase.t.FreeTypeVars()
+		if !reflect.DeepEqual(testcase.expected, actual) {
+			t.Errorf(
+				"given %v, expected %v, but got actual %v",
+				testcase.t,
+				testcase.expected,
+				actual,
+			)
+		}
+	}
+}
