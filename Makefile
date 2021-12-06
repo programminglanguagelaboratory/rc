@@ -1,4 +1,9 @@
+all: build test
+
+build:
+	@go build -o build/ ./...
+
 test:
 	@go test ./...
 
-.PHONY: test
+.PHONY: build test
