@@ -7,11 +7,9 @@ import (
 	"github.com/programminglanguagelaboratory/rc/pkg/typ"
 )
 
-type context struct {
-	Substitutable
-}
+type context struct{}
 
-func (c *context) Apply() Substitutable {
+func (c *context) Apply(s Subst) Substitutable {
 	panic("not impl")
 }
 
