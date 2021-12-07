@@ -11,7 +11,7 @@ import (
 )
 
 func TestInferExpr(t *testing.T) {
-	for _, testcase := range []struct {
+	for _, tt := range []struct {
 		code     string
 		expected typ.Typ
 	}{
@@ -25,40 +25,27 @@ func TestInferExpr(t *testing.T) {
 
 		{"10 + 20", typ.NewNumber()},
 	} {
-		expr, err := parser.NewParser(lexer.NewLexer(testcase.code), nil).Parse()
+		expr, err := parser.NewParser(lexer.NewLexer(tt.code), nil).Parse()
 		if err != nil {
-			t.Errorf("given %v, expected %v, but got an error: %v",
-				testcase.code,
-				testcase.expected,
-				err,
-			)
+			t.Errorf("given %v, expected %v, but got an error: %v", tt.code, tt.expected, err)
 			continue
 		}
 
 		desugared := desugar.Desugar(expr)
 		actual, err := Infer(desugared)
 		if err != nil {
-			t.Errorf("given %v, expected %v, but got an error: %v",
-				testcase.code,
-				testcase.expected,
-				err,
-			)
+			t.Errorf("given %v, expected %v, but got an error: %v", tt.code, tt.expected, err)
 			continue
 		}
 
-		if testcase.expected != actual {
-			t.Errorf(
-				"given %v, expected %v, but got actual %v",
-				testcase.code,
-				testcase.expected,
-				actual,
-			)
+		if tt.expected != actual {
+			t.Errorf("given %v, expected %v, but got actual %v", tt.code, tt.expected, actual)
 		}
 	}
 }
 
 func TestSchemeApply(t *testing.T) {
-	for _, testcase := range []struct {
+	for _, tt := range []struct {
 		s        *scheme
 		subst    Subst
 		expected *scheme
@@ -74,21 +61,15 @@ func TestSchemeApply(t *testing.T) {
 			&scheme{[]string{"a"}, &funcTyp{from: &varTyp{"a"}, to: &varTyp{"b"}}},
 		},
 	} {
-		actual := testcase.s.Apply(testcase.subst)
-		if !reflect.DeepEqual(testcase.expected, actual) {
-			t.Errorf(
-				"given %v, %v, expected %v, but got actual %v",
-				testcase.s,
-				testcase.subst,
-				testcase.expected,
-				actual,
-			)
+		actual := tt.s.Apply(tt.subst)
+		if !reflect.DeepEqual(tt.expected, actual) {
+			t.Errorf("given %v, %v, expected %v, but got actual %v", tt.s, tt.subst, tt.expected, actual)
 		}
 	}
 }
 
 func TestSchemeFreeTypeVars(t *testing.T) {
-	for _, testcase := range []struct {
+	for _, tt := range []struct {
 		s        *scheme
 		expected []string
 	}{
@@ -106,20 +87,15 @@ func TestSchemeFreeTypeVars(t *testing.T) {
 		},
 	} {
 		actual := make(map[string]struct{})
-		for _, tv := range testcase.s.FreeTypeVars() {
+		for _, tv := range tt.s.FreeTypeVars() {
 			actual[tv] = struct{}{}
 		}
 		expected := make(map[string]struct{})
-		for _, tv := range testcase.expected {
+		for _, tv := range tt.expected {
 			expected[tv] = struct{}{}
 		}
 		if !reflect.DeepEqual(expected, actual) {
-			t.Errorf(
-				"given %v, expected %v, but got actual %v",
-				testcase.s,
-				testcase.expected,
-				actual,
-			)
+			t.Errorf("given %v, expected %v, but got actual %v", tt.s, tt.expected, actual)
 		}
 	}
 }

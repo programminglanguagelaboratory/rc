@@ -7,7 +7,7 @@ import (
 )
 
 func TestToken(t *testing.T) {
-	for _, testcase := range []struct {
+	for _, tt := range []struct {
 		code     string
 		expected token.Token
 	}{
@@ -45,20 +45,12 @@ func TestToken(t *testing.T) {
 
 		{"", token.Token{Kind: token.EOF}},
 	} {
-		actual, err := NewLexer(testcase.code).Lex()
+		actual, err := NewLexer(tt.code).Lex()
 		if err != nil {
-			t.Errorf("given %v, expected %v, but got an error: %v",
-				testcase.code,
-				testcase.expected,
-				err,
-			)
-		} else if testcase.expected != actual {
-			t.Errorf(
-				"given %v, expected %v, but got actual %v",
-				testcase.code,
-				testcase.expected,
-				actual,
-			)
+			t.Errorf("given %v, expected %v, but got an error: %v", tt.code, tt.expected, err)
+		}
+		if tt.expected != actual {
+			t.Errorf("given %v, expected %v, but got actual %v", tt.code, tt.expected, actual)
 		}
 	}
 }

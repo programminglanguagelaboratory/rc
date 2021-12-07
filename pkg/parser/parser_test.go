@@ -10,7 +10,7 @@ import (
 )
 
 func TestExpr(t *testing.T) {
-	for _, testcase := range []struct {
+	for _, tt := range []struct {
 		code     string
 		expected ast.Expr
 	}{
@@ -151,23 +151,14 @@ func TestExpr(t *testing.T) {
 			},
 		},
 	} {
-		actual, err := NewParser(lexer.NewLexer(testcase.code), nil).parseExpr()
+		actual, err := NewParser(lexer.NewLexer(tt.code), nil).parseExpr()
 		if err != nil {
-			t.Errorf("given %v, expected %v, but got an error: %v",
-				testcase.code,
-				testcase.expected,
-				err,
-			)
+			t.Errorf("given %v, expected %v, but got an error: %v", tt.code, tt.expected, err)
 			continue
 		}
 
-		if !reflect.DeepEqual(testcase.expected, actual) {
-			t.Errorf(
-				"given %v, expected %v, but got actual %v",
-				testcase.code,
-				testcase.expected,
-				actual,
-			)
+		if !reflect.DeepEqual(tt.expected, actual) {
+			t.Errorf("given %v, expected %v, but got actual %v", tt.code, tt.expected, actual)
 		}
 	}
 }
