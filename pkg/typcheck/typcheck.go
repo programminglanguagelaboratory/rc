@@ -24,7 +24,7 @@ type scheme struct {
 }
 
 func (s scheme) Apply(subst Subst) Substitutable {
-	var freeSubst Subst
+	freeSubst := Subst{}
 	for tv, t := range subst {
 		freeSubst[tv] = t
 	}
