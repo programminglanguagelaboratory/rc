@@ -2,6 +2,7 @@ package typcheck
 
 import (
 	"errors"
+	"strings"
 
 	"github.com/programminglanguagelaboratory/rc/pkg/ast"
 	"github.com/programminglanguagelaboratory/rc/pkg/typ"
@@ -53,6 +54,20 @@ func (s scheme) FreeTypeVars() []string {
 		i++
 	}
 	return ret
+}
+
+func (s scheme) String() string {
+	var out strings.Builder
+	if s.tvs != nil {
+		out.WriteString("forall")
+		for _, tv := range s.tvs {
+			out.WriteString(" ")
+			out.WriteString(tv)
+		}
+		out.WriteString(".")
+	}
+	out.WriteString(s.t.String())
+	return out.String()
 }
 
 func Infer(e ast.Expr) (typ.Typ, error) {
