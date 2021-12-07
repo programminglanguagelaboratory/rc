@@ -59,19 +59,19 @@ func TestInferExpr(t *testing.T) {
 
 func TestSchemeApplyTest(t *testing.T) {
 	for _, testcase := range []struct {
-		s        scheme
+		s        *scheme
 		subst    Subst
-		expected scheme
+		expected *scheme
 	}{
 		{
-			scheme{nil, &funcTyp{from: &varTyp{"a"}, to: &varTyp{"b"}}},
+			&scheme{nil, &funcTyp{from: &varTyp{"a"}, to: &varTyp{"b"}}},
 			map[string]typ.Typ{"a": typ.NewBool()},
-			scheme{nil, &funcTyp{from: &constTyp{typ.NewBool()}, to: &varTyp{"b"}}},
+			&scheme{nil, &funcTyp{from: &constTyp{typ.NewBool()}, to: &varTyp{"b"}}},
 		},
 		{
-			scheme{[]string{"a"}, &funcTyp{from: &varTyp{"a"}, to: &varTyp{"b"}}},
+			&scheme{[]string{"a"}, &funcTyp{from: &varTyp{"a"}, to: &varTyp{"b"}}},
 			map[string]typ.Typ{"a": typ.NewBool()},
-			scheme{nil, &funcTyp{from: &varTyp{"a"}, to: &varTyp{"b"}}},
+			&scheme{[]string{"a"}, &funcTyp{from: &varTyp{"a"}, to: &varTyp{"b"}}},
 		},
 	} {
 		actual := testcase.s.Apply(testcase.subst)
