@@ -1,6 +1,7 @@
 package typcheck
 
 import (
+	"reflect"
 	"testing"
 
 	"github.com/programminglanguagelaboratory/rc/pkg/desugar"
@@ -49,6 +50,36 @@ func TestInferExpr(t *testing.T) {
 			t.Errorf(
 				"given %v, expected %v, but got actual %v",
 				testcase.code,
+				testcase.expected,
+				actual,
+			)
+		}
+	}
+}
+
+func TestSchemeApplyTest(t *testing.T) {
+	for _, testcase := range []struct {
+		s        scheme
+		subst    Subst
+		expected scheme
+	}{
+		{
+			scheme{[]string{}, &funcTyp{from: &varTyp{"a"}, to: &varTyp{"b"}}},
+			map[string]typ.Typ{"a": typ.NewBool()},
+			scheme{[]string{}, &funcTyp{from: &constTyp{typ.NewBool()}, to: &varTyp{"b"}}},
+		},
+		{
+			scheme{[]string{"a"}, &funcTyp{from: &varTyp{"a"}, to: &varTyp{"b"}}},
+			map[string]typ.Typ{"a": typ.NewBool()},
+			scheme{[]string{"a"}, &funcTyp{from: &varTyp{"a"}, to: &varTyp{"b"}}},
+		},
+	} {
+		actual := testcase.s.Apply(testcase.subst)
+		if !reflect.DeepEqual(testcase.expected, actual) {
+			t.Errorf(
+				"given %v, %v, expected %v, but got actual %v",
+				testcase.s,
+				testcase.subst,
 				testcase.expected,
 				actual,
 			)
