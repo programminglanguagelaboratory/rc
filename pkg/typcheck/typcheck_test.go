@@ -57,7 +57,7 @@ func TestInferExpr(t *testing.T) {
 	}
 }
 
-func TestSchemeApplyTest(t *testing.T) {
+func TestSchemeApply(t *testing.T) {
 	for _, testcase := range []struct {
 		s        *scheme
 		subst    Subst
