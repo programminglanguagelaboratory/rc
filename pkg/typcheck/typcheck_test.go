@@ -64,14 +64,14 @@ func TestSchemeApplyTest(t *testing.T) {
 		expected scheme
 	}{
 		{
-			scheme{[]string{}, &funcTyp{from: &varTyp{"a"}, to: &varTyp{"b"}}},
+			scheme{nil, &funcTyp{from: &varTyp{"a"}, to: &varTyp{"b"}}},
 			map[string]typ.Typ{"a": typ.NewBool()},
-			scheme{[]string{}, &funcTyp{from: &constTyp{typ.NewBool()}, to: &varTyp{"b"}}},
+			scheme{nil, &funcTyp{from: &constTyp{typ.NewBool()}, to: &varTyp{"b"}}},
 		},
 		{
 			scheme{[]string{"a"}, &funcTyp{from: &varTyp{"a"}, to: &varTyp{"b"}}},
 			map[string]typ.Typ{"a": typ.NewBool()},
-			scheme{[]string{"a"}, &funcTyp{from: &varTyp{"a"}, to: &varTyp{"b"}}},
+			scheme{nil, &funcTyp{from: &varTyp{"a"}, to: &varTyp{"b"}}},
 		},
 	} {
 		actual := testcase.s.Apply(testcase.subst)
