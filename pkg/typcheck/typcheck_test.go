@@ -86,3 +86,40 @@ func TestSchemeApplyTest(t *testing.T) {
 		}
 	}
 }
+
+func TestSchemeFreeTypeVars(t *testing.T) {
+	for _, testcase := range []struct {
+		s        *scheme
+		expected []string
+	}{
+		{
+			&scheme{nil, &funcTyp{from: &varTyp{"a"}, to: &varTyp{"b"}}},
+			[]string{"a", "b"},
+		},
+		{
+			&scheme{[]string{"a"}, &funcTyp{from: &varTyp{"a"}, to: &varTyp{"b"}}},
+			[]string{"b"},
+		},
+		{
+			&scheme{[]string{"b"}, &funcTyp{from: &varTyp{"a"}, to: &funcTyp{from: &varTyp{"b"}, to: &varTyp{"a"}}}},
+			[]string{"a"},
+		},
+	} {
+		actual := make(map[string]struct{})
+		for _, tv := range testcase.s.FreeTypeVars() {
+			actual[tv] = struct{}{}
+		}
+		expected := make(map[string]struct{})
+		for _, tv := range testcase.expected {
+			expected[tv] = struct{}{}
+		}
+		if !reflect.DeepEqual(expected, actual) {
+			t.Errorf(
+				"given %v, expected %v, but got actual %v",
+				testcase.s,
+				testcase.expected,
+				actual,
+			)
+		}
+	}
+}
