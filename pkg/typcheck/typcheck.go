@@ -79,13 +79,21 @@ func Infer(e ast.Expr) (typ.Typ, error) {
 
 func inferExpr(e ast.Expr) (typ.Typ, error) {
 	switch e.(type) {
+	case ast.DeclExpr:
+		return nil, errors.New("not impl")
+	case ast.CallExpr:
+		return nil, errors.New("not impl")
+	case ast.IdentExpr:
+		return nil, errors.New("not impl")
 	case ast.StringExpr:
 		return typ.NewString(), nil
 	case ast.NumberExpr:
 		return typ.NewNumber(), nil
 	case ast.BoolExpr:
 		return typ.NewBool(), nil
-	default:
+	case ast.FuncLitExpr:
 		return nil, errors.New("not impl")
+	default:
+		return nil, errors.New("unexpected sugared expression")
 	}
 }
