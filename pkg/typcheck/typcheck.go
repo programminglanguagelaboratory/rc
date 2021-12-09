@@ -2,22 +2,31 @@ package typcheck
 
 import (
 	"errors"
+	"fmt"
 	"strings"
 
 	"github.com/programminglanguagelaboratory/rc/pkg/ast"
 	"github.com/programminglanguagelaboratory/rc/pkg/typ"
 )
 
-type context map[string]scheme
+type context struct {
+	tvs    map[string]scheme
+	lastId int
+}
 
-func (c context) Apply(subst Subst) Substitutable {
-	for tv, s := range c {
-		c[tv] = s.Apply(subst).(scheme)
+func (c *context) GenId() string {
+	c.lastId++
+	return fmt.Sprintf("%d", c.lastId)
+}
+
+func (c *context) Apply(subst Subst) Substitutable {
+	for tv, s := range c.tvs {
+		c.tvs[tv] = s.Apply(subst).(scheme)
 	}
 	return Substitutable(c)
 }
 
-func (c context) FreeTypeVars() []string {
+func (c *context) FreeTypeVars() []string {
 	panic("not impl")
 }
 
