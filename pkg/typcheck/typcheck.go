@@ -85,7 +85,13 @@ func (s scheme) String() string {
 func Infer(e ast.Expr) (typ.Typ, error) {
 	c := context{}
 	c.tvs = make(map[string]scheme)
-	return c.inferExpr(e)
+	inferTyp, err := c.inferExpr(e)
+	if err != nil {
+		return nil, err
+	}
+
+	typ := inferTyp.(*constTyp)
+	return typ.t, nil
 }
 
 func (c *context) inferExpr(e ast.Expr) (inferTyp, error) {
