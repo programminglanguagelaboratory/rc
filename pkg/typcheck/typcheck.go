@@ -8,10 +8,13 @@ import (
 	"github.com/programminglanguagelaboratory/rc/pkg/typ"
 )
 
-type context struct{}
+type context map[string]scheme
 
-func (c *context) Apply(s Subst) Substitutable {
-	panic("not impl")
+func (c context) Apply(subst Subst) Substitutable {
+	for tv, s := range c {
+		c[tv] = s.Apply(subst).(scheme)
+	}
+	return Substitutable(c)
 }
 
 func (c context) FreeTypeVars() []string {
