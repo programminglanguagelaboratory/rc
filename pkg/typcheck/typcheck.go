@@ -14,7 +14,7 @@ func (c *context) Apply(s Subst) Substitutable {
 	panic("not impl")
 }
 
-func (c *context) FreeTypeVars() Substitutable {
+func (c context) FreeTypeVars() []string {
 	panic("not impl")
 }
 
