@@ -83,11 +83,13 @@ func (s scheme) String() string {
 }
 
 func Infer(e ast.Expr) (typ.Typ, error) {
-	return inferExpr(e)
+	c := context{}
+	c.tvs = make(map[string]scheme)
+	return c.inferExpr(e)
 }
 
-func inferExpr(e ast.Expr) (typ.Typ, error) {
-	switch e.(type) {
+func (c *context) inferExpr(e ast.Expr) (inferTyp, error) {
+	switch e := e.(type) {
 	case ast.DeclExpr:
 		return nil, errors.New("not impl")
 	case ast.CallExpr:
@@ -95,13 +97,20 @@ func inferExpr(e ast.Expr) (typ.Typ, error) {
 	case ast.IdentExpr:
 		return nil, errors.New("not impl")
 	case ast.StringExpr:
-		return typ.NewString(), nil
+		return &constTyp{typ.NewString()}, nil
 	case ast.NumberExpr:
-		return typ.NewNumber(), nil
+		return &constTyp{typ.NewNumber()}, nil
 	case ast.BoolExpr:
-		return typ.NewBool(), nil
+		return &constTyp{typ.NewBool()}, nil
 	case ast.FuncLitExpr:
-		return nil, errors.New("not impl")
+		nameTypVar := c.GenId()
+		nameTyp := &varTyp{nameTypVar}
+		c.tvs[nameTypVar] = scheme{t: nameTyp}
+		bodyTyp, err := c.inferExpr(e.Body)
+		if err != nil {
+			return nil, err
+		}
+		return &funcTyp{from: nameTyp, to: bodyTyp}, nil
 	default:
 		return nil, errors.New("unexpected sugared expression")
 	}
