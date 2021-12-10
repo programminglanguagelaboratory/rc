@@ -3,13 +3,13 @@ package desugar
 import "github.com/programminglanguagelaboratory/rc/pkg/ast"
 
 func Desugar(e ast.Expr) ast.Expr {
-	switch v := interface{}(e).(type) {
+	switch e := (e).(type) {
 	case ast.BinaryExpr:
-		return desugarBinaryExpr(v)
+		return desugarBinaryExpr(e)
 	case ast.UnaryExpr:
-		return desugarUnaryExpr(v)
+		return desugarUnaryExpr(e)
 	default:
-		return v
+		return e
 	}
 }
 
