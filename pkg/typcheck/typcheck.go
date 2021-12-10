@@ -103,7 +103,14 @@ func Infer(e ast.Expr) (typ.Typ, error) {
 func (c *context) inferExpr(e ast.Expr) (inferTyp, Subst, error) {
 	switch e := e.(type) {
 	case ast.DeclExpr:
-		return nil, nil, errors.New("not impl")
+		valueTyp, valueSubst, err := c.inferExpr(e.Value)
+		c.tvs[string(e.Name)] = &scheme{t: valueTyp}
+		c.Apply(valueSubst)
+		bodyTyp, bodySubst, err := c.inferExpr(e.Body)
+		if err != nil {
+			return nil, nil, err
+		}
+		return bodyTyp, composeSubst(valueSubst, bodySubst), nil
 	case ast.CallExpr:
 		return nil, nil, errors.New("not impl")
 	case ast.IdentExpr:
