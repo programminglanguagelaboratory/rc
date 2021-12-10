@@ -85,7 +85,7 @@ func (s scheme) String() string {
 func Infer(e ast.Expr) (typ.Typ, error) {
 	c := context{}
 	c.tvs = make(map[string]scheme)
-	inferTyp, err := c.inferExpr(e)
+	inferTyp, _, err := c.inferExpr(e)
 	if err != nil {
 		return nil, err
 	}
@@ -94,30 +94,31 @@ func Infer(e ast.Expr) (typ.Typ, error) {
 	return typ.t, nil
 }
 
-func (c *context) inferExpr(e ast.Expr) (inferTyp, error) {
+func (c *context) inferExpr(e ast.Expr) (inferTyp, Subst, error) {
 	switch e := e.(type) {
 	case ast.DeclExpr:
-		return nil, errors.New("not impl")
+		return nil, nil, errors.New("not impl")
 	case ast.CallExpr:
-		return nil, errors.New("not impl")
+		return nil, nil, errors.New("not impl")
 	case ast.IdentExpr:
-		return nil, errors.New("not impl")
+		return nil, nil, errors.New("not impl")
 	case ast.StringExpr:
-		return &constTyp{typ.NewString()}, nil
+		return &constTyp{typ.NewString()}, nil, nil
 	case ast.NumberExpr:
-		return &constTyp{typ.NewNumber()}, nil
+		return &constTyp{typ.NewNumber()}, nil, nil
 	case ast.BoolExpr:
-		return &constTyp{typ.NewBool()}, nil
+		return &constTyp{typ.NewBool()}, nil, nil
 	case ast.FuncLitExpr:
 		nameTypVar := c.GenId()
-		nameTyp := &varTyp{nameTypVar}
+		nameTyp := inferTyp(&varTyp{nameTypVar})
 		c.tvs[nameTypVar] = scheme{t: nameTyp}
-		bodyTyp, err := c.inferExpr(e.Body)
+		bodyTyp, bodySubst, err := c.inferExpr(e.Body)
 		if err != nil {
-			return nil, err
+			return nil, nil, err
 		}
-		return &funcTyp{from: nameTyp, to: bodyTyp}, nil
+		nameTyp = nameTyp.Apply(bodySubst).(inferTyp)
+		return &funcTyp{from: nameTyp, to: bodyTyp}, bodySubst, nil
 	default:
-		return nil, errors.New("unexpected sugared expression")
+		return nil, nil, errors.New("unexpected sugared expression")
 	}
 }
