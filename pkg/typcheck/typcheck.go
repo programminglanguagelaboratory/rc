@@ -10,7 +10,7 @@ import (
 )
 
 type context struct {
-	tvs    map[string]scheme
+	tvs    map[string]*scheme
 	lastId int
 }
 
@@ -21,7 +21,7 @@ func (c *context) GenId() string {
 
 func (c *context) Apply(subst Subst) Substitutable {
 	for tv, s := range c.tvs {
-		c.tvs[tv] = s.Apply(subst).(scheme)
+		c.tvs[tv] = s.Apply(subst).(*scheme)
 	}
 	return Substitutable(c)
 }
@@ -84,7 +84,7 @@ func (s scheme) String() string {
 
 func Infer(e ast.Expr) (typ.Typ, error) {
 	c := context{}
-	c.tvs = make(map[string]scheme)
+	c.tvs = make(map[string]*scheme)
 	inferTyp, _, err := c.inferExpr(e)
 	if err != nil {
 		return nil, err
@@ -117,7 +117,7 @@ func (c *context) inferExpr(e ast.Expr) (inferTyp, Subst, error) {
 	case ast.FuncLitExpr:
 		nameTypVar := c.GenId()
 		nameTyp := inferTyp(&varTyp{nameTypVar})
-		c.tvs[nameTypVar] = scheme{t: nameTyp}
+		c.tvs[nameTypVar] = &scheme{t: nameTyp}
 		bodyTyp, bodySubst, err := c.inferExpr(e.Body)
 		if err != nil {
 			return nil, nil, err
