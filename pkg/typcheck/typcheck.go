@@ -35,6 +35,15 @@ type scheme struct {
 	t   inferTyp
 }
 
+func (c *context) instantiateScheme(s *scheme) inferTyp {
+	panic("not impl")
+	// instantiateSubst := Subst{}
+	// for _, tv := range s.tvs {
+	//   instantiateSubst[tv] = &varTyp{c.GenId()}
+	// }
+	// return s.Apply(instantiateSubst).(*scheme).t
+}
+
 func (s scheme) Apply(subst Subst) Substitutable {
 	freeSubst := Subst{}
 	for tv, t := range subst {
@@ -114,7 +123,11 @@ func (c *context) inferExpr(e ast.Expr) (inferTyp, Subst, error) {
 	case ast.CallExpr:
 		return nil, nil, errors.New("not impl")
 	case ast.IdentExpr:
-		return nil, nil, errors.New("not impl")
+		s, ok := c.tvs[e.Value]
+		if !ok {
+			return nil, nil, fmt.Errorf("undefined variable: %s", s)
+		}
+		return c.instantiateScheme(s), nil, nil
 	case ast.StringExpr:
 		return &constTyp{typ.NewString()}, nil, nil
 	case ast.NumberExpr:
