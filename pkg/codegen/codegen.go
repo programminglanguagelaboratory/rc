@@ -38,21 +38,21 @@ func (c *Codegen) Gen(e ast.Expr) (*ir.Module, error) {
 }
 
 func (c *Codegen) genExpr(e ast.Expr) (value.Value, error) {
-	switch v := interface{}(e).(type) {
+	switch e := (e).(type) {
 	case ast.BinaryExpr:
 	case ast.UnaryExpr:
 		return nil, errors.New("unexpected sugared expression")
 	case ast.DeclExpr:
-		return c.genDeclExpr(v)
+		return c.genDeclExpr(e)
 	case ast.IdentExpr:
-		p, ok := c.decls[ast.Id(v.Value)]
+		p, ok := c.decls[ast.Id(e.Value)]
 		if !ok {
-			return nil, errors.New("undefined variable: " + v.Value)
+			return nil, errors.New("undefined variable: " + e.Value)
 		}
 		value := c.blk.NewLoad(types.I64, p)
 		return value, nil
 	case ast.NumberExpr:
-		return constant.NewInt(types.I64, v.Value), nil
+		return constant.NewInt(types.I64, e.Value), nil
 	}
 	return nil, errors.New("not implemented")
 }
