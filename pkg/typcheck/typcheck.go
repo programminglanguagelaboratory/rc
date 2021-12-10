@@ -90,8 +90,14 @@ func Infer(e ast.Expr) (typ.Typ, error) {
 		return nil, err
 	}
 
-	typ := inferTyp.(*constTyp)
-	return typ.t, nil
+	switch inferTyp := inferTyp.(type) {
+	case *constTyp:
+		return inferTyp.t, nil
+	case *funcTyp:
+		return typ.NewFunc(), nil
+	default:
+		return nil, errors.New("not impl")
+	}
 }
 
 func (c *context) inferExpr(e ast.Expr) (inferTyp, Subst, error) {
