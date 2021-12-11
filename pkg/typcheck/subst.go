@@ -1,8 +1,6 @@
 package typcheck
 
-import "github.com/programminglanguagelaboratory/rc/pkg/typ"
-
-type Subst map[string]typ.Typ
+type Subst map[string]inferTyp
 
 func composeSubst(x, y Subst) Subst {
 	s := make(Subst)

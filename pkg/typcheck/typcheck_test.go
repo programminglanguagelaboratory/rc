@@ -52,12 +52,12 @@ func TestSchemeApply(t *testing.T) {
 	}{
 		{
 			&scheme{nil, &funcTyp{from: &varTyp{"a"}, to: &varTyp{"b"}}},
-			map[string]typ.Typ{"a": typ.NewBool()},
+			Subst{"a": &constTyp{typ.NewBool()}},
 			&scheme{nil, &funcTyp{from: &constTyp{typ.NewBool()}, to: &varTyp{"b"}}},
 		},
 		{
 			&scheme{[]string{"a"}, &funcTyp{from: &varTyp{"a"}, to: &varTyp{"b"}}},
-			map[string]typ.Typ{"a": typ.NewBool()},
+			Subst{"a": &constTyp{typ.NewBool()}},
 			&scheme{[]string{"a"}, &funcTyp{from: &varTyp{"a"}, to: &varTyp{"b"}}},
 		},
 	} {

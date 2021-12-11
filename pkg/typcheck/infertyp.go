@@ -26,7 +26,7 @@ type varTyp struct {
 }
 
 func (t *varTyp) Apply(s Subst) Substitutable {
-	c, ok := map[string]typ.Typ(s)[t.tv]
+	c, ok := s[t.tv]
 	if !ok {
 		return Substitutable(t)
 	}

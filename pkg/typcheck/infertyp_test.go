@@ -15,17 +15,17 @@ func TestApply(t *testing.T) {
 	}{
 		{
 			inferTyp(&varTyp{tv: "a"}),
-			map[string]typ.Typ{},
+			nil,
 			inferTyp(&varTyp{tv: "a"}),
 		},
 		{
 			inferTyp(&varTyp{tv: "a"}),
-			map[string]typ.Typ{"a": typ.NewBool()},
+			Subst{"a": &constTyp{typ.NewBool()}},
 			inferTyp(&constTyp{t: typ.NewBool()}),
 		},
 		{
 			inferTyp(&funcTyp{from: &varTyp{tv: "a"}, to: &varTyp{tv: "b"}}),
-			map[string]typ.Typ{"a": typ.NewBool(), "b": typ.NewNumber()},
+			Subst{"a": &constTyp{typ.NewBool()}, "b": &constTyp{typ.NewNumber()}},
 			inferTyp(&funcTyp{from: &constTyp{t: typ.NewBool()}, to: &constTyp{t: typ.NewNumber()}}),
 		},
 	} {
