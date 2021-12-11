@@ -21,7 +21,7 @@ func TestApply(t *testing.T) {
 		{
 			&varTyp{"a"},
 			Subst{"a": &constTyp{typ.NewBool()}},
-			&constTyp{t: typ.NewBool()},
+			&constTyp{typ.NewBool()},
 		},
 		{
 			&funcTyp{from: &varTyp{"a"}, to: &varTyp{"b"}},

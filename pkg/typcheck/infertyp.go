@@ -30,7 +30,7 @@ func (t *varTyp) Apply(s Subst) Substitutable {
 	if !ok {
 		return t
 	}
-	return &constTyp{c}
+	return c
 }
 func (t *varTyp) FreeTypeVars() []string { return []string{t.tv} }
 func (t *varTyp) String() string         { return t.tv }
