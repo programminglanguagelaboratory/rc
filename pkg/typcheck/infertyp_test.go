@@ -7,7 +7,7 @@ import (
 	"github.com/programminglanguagelaboratory/rc/pkg/typ"
 )
 
-func TestApply(t *testing.T) {
+func TestInferTypApply(t *testing.T) {
 	for _, tt := range []struct {
 		t        inferTyp
 		subst    Subst
@@ -36,7 +36,7 @@ func TestApply(t *testing.T) {
 	}
 }
 
-func TestFreeTypeVars(t *testing.T) {
+func TestInferTypFreeTypeVars(t *testing.T) {
 	for _, tt := range []struct {
 		t        inferTyp
 		expected []string
