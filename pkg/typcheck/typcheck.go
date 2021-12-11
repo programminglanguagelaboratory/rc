@@ -44,7 +44,7 @@ func (c *context) instantiateScheme(s *scheme) inferTyp {
 	// return s.Apply(instantiateSubst).(*scheme).t
 }
 
-func (s scheme) Apply(subst Subst) Substitutable {
+func (s *scheme) Apply(subst Subst) Substitutable {
 	freeSubst := Subst{}
 	for tv, t := range subst {
 		freeSubst[tv] = t
@@ -59,7 +59,7 @@ func (s scheme) Apply(subst Subst) Substitutable {
 	})
 }
 
-func (s scheme) FreeTypeVars() []string {
+func (s *scheme) FreeTypeVars() []string {
 	tvs := make(map[string]struct{})
 	for _, tv := range s.t.FreeTypeVars() {
 		tvs[tv] = struct{}{}
@@ -77,7 +77,7 @@ func (s scheme) FreeTypeVars() []string {
 	return ret
 }
 
-func (s scheme) String() string {
+func (s *scheme) String() string {
 	var out strings.Builder
 	if s.tvs != nil {
 		out.WriteString("forall")
