@@ -27,7 +27,8 @@ func (c *context) Apply(subst Subst) Substitutable {
 }
 
 func (c *context) FreeTypeVars() []string {
-	panic("not impl")
+	// panic("not impl")
+	return nil
 }
 
 type scheme struct {
@@ -36,7 +37,8 @@ type scheme struct {
 }
 
 func (c *context) instantiateScheme(s *scheme) inferTyp {
-	panic("not impl")
+	// panic("not impl")
+	return nil
 	// instantiateSubst := Subst{}
 	// for _, tv := range s.tvs {
 	//   instantiateSubst[tv] = &varTyp{c.GenId()}
