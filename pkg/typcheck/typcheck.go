@@ -37,13 +37,11 @@ type scheme struct {
 }
 
 func (c *context) instantiateScheme(s *scheme) inferTyp {
-	// panic("not impl")
-	return nil
-	// instantiateSubst := Subst{}
-	// for _, tv := range s.tvs {
-	//   instantiateSubst[tv] = &varTyp{c.GenId()}
-	// }
-	// return s.Apply(instantiateSubst).(*scheme).t
+	instantiateSubst := Subst{}
+	for _, tv := range s.tvs {
+		instantiateSubst[tv] = &varTyp{c.GenId()}
+	}
+	return s.Apply(instantiateSubst).(*scheme).t
 }
 
 func (s *scheme) Apply(subst Subst) Substitutable {
