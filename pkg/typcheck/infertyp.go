@@ -16,7 +16,7 @@ type constTyp struct {
 	t typ.Typ
 }
 
-func (t *constTyp) Apply(s Subst) Substitutable { return Substitutable(t) }
+func (t *constTyp) Apply(s Subst) Substitutable { return t }
 func (t *constTyp) FreeTypeVars() []string      { return nil }
 func (t *constTyp) String() string              { return t.t.String() }
 func (t *constTyp) inferType()                  {}
@@ -28,9 +28,9 @@ type varTyp struct {
 func (t *varTyp) Apply(s Subst) Substitutable {
 	c, ok := s[t.tv]
 	if !ok {
-		return Substitutable(t)
+		return t
 	}
-	return Substitutable(&constTyp{t: c})
+	return &constTyp{c}
 }
 func (t *varTyp) FreeTypeVars() []string { return []string{t.tv} }
 func (t *varTyp) String() string         { return t.tv }
@@ -42,10 +42,10 @@ type funcTyp struct {
 }
 
 func (t *funcTyp) Apply(s Subst) Substitutable {
-	return Substitutable(&funcTyp{
+	return &funcTyp{
 		from: t.from.Apply(s).(inferTyp),
 		to:   t.to.Apply(s).(inferTyp),
-	})
+	}
 }
 func (t *funcTyp) FreeTypeVars() []string {
 	tvs := make(map[string]struct{})

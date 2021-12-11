@@ -14,19 +14,19 @@ func TestApply(t *testing.T) {
 		expected inferTyp
 	}{
 		{
-			inferTyp(&varTyp{tv: "a"}),
+			&varTyp{"a"},
 			nil,
-			inferTyp(&varTyp{tv: "a"}),
+			&varTyp{"a"},
 		},
 		{
-			inferTyp(&varTyp{tv: "a"}),
+			&varTyp{"a"},
 			Subst{"a": &constTyp{typ.NewBool()}},
-			inferTyp(&constTyp{t: typ.NewBool()}),
+			&constTyp{t: typ.NewBool()},
 		},
 		{
-			inferTyp(&funcTyp{from: &varTyp{tv: "a"}, to: &varTyp{tv: "b"}}),
+			&funcTyp{from: &varTyp{"a"}, to: &varTyp{"b"}},
 			Subst{"a": &constTyp{typ.NewBool()}, "b": &constTyp{typ.NewNumber()}},
-			inferTyp(&funcTyp{from: &constTyp{t: typ.NewBool()}, to: &constTyp{t: typ.NewNumber()}}),
+			&funcTyp{from: &constTyp{typ.NewBool()}, to: &constTyp{typ.NewNumber()}},
 		},
 	} {
 		actual := tt.t.Apply(tt.subst)
@@ -42,15 +42,15 @@ func TestFreeTypeVars(t *testing.T) {
 		expected []string
 	}{
 		{
-			inferTyp(&varTyp{tv: "a"}),
+			&varTyp{"a"},
 			[]string{"a"},
 		},
 		{
-			inferTyp(&constTyp{t: typ.NewBool()}),
+			&constTyp{typ.NewBool()},
 			nil,
 		},
 		{
-			inferTyp(&funcTyp{from: &varTyp{tv: "a"}, to: &varTyp{tv: "b"}}),
+			&funcTyp{from: &varTyp{"a"}, to: &varTyp{"b"}},
 			[]string{"a", "b"},
 		},
 	} {

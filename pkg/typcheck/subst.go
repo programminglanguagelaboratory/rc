@@ -3,7 +3,7 @@ package typcheck
 type Subst map[string]inferTyp
 
 func composeSubst(x, y Subst) Subst {
-	s := make(Subst)
+	s := Subst{}
 	for k, v := range y {
 		s[k] = v
 	}

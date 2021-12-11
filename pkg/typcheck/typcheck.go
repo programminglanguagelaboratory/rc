@@ -23,7 +23,7 @@ func (c *context) Apply(subst Subst) Substitutable {
 	for tv, s := range c.tvs {
 		c.tvs[tv] = s.Apply(subst).(*scheme)
 	}
-	return Substitutable(c)
+	return c
 }
 
 func (c *context) FreeTypeVars() []string {
@@ -55,10 +55,10 @@ func (s *scheme) Apply(subst Subst) Substitutable {
 		delete(freeSubst, tv)
 	}
 
-	return Substitutable(&scheme{
+	return &scheme{
 		tvs: s.tvs,
 		t:   s.t.Apply(freeSubst).(inferTyp),
-	})
+	}
 }
 
 func (s *scheme) FreeTypeVars() []string {
@@ -94,7 +94,7 @@ func (s *scheme) String() string {
 }
 
 func Infer(e ast.Expr) (typ.Typ, error) {
-	c := context{}
+	c := &context{}
 	c.tvs = make(map[string]*scheme)
 	inferTyp, _, err := c.inferExpr(e)
 	if err != nil {
