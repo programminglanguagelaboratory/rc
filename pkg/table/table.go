@@ -13,12 +13,12 @@ type Table struct {
 }
 
 func (t *Table) Resolve(id ast.Id) (typ.Typ, bool) {
-	if t.Id == id {
-		return t.Typ, true
+	if t == nil {
+		return nil, false
 	}
 
-	if t.Outer == nil {
-		return nil, false
+	if t.Id == id {
+		return t.Typ, true
 	}
 
 	return t.Outer.Resolve(id)
