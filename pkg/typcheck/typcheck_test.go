@@ -5,7 +5,6 @@ import (
 	"testing"
 
 	"github.com/programminglanguagelaboratory/rc/pkg/desugar"
-	"github.com/programminglanguagelaboratory/rc/pkg/lexer"
 	"github.com/programminglanguagelaboratory/rc/pkg/parser"
 	"github.com/programminglanguagelaboratory/rc/pkg/typ"
 )
@@ -25,7 +24,7 @@ func TestInferExpr(t *testing.T) {
 
 		{"10 + 20", typ.NewNumber()},
 	} {
-		expr, err := parser.NewParser(lexer.NewLexer(tt.code), nil).Parse()
+		expr, err := parser.Parse(tt.code)
 		if err != nil {
 			t.Errorf("given %v, expected %v, but got an error: %v", tt.code, tt.expected, err)
 			continue

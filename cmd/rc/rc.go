@@ -7,7 +7,6 @@ import (
 
 	"github.com/programminglanguagelaboratory/rc/pkg/codegen"
 	"github.com/programminglanguagelaboratory/rc/pkg/desugar"
-	"github.com/programminglanguagelaboratory/rc/pkg/lexer"
 	"github.com/programminglanguagelaboratory/rc/pkg/parser"
 )
 
@@ -19,10 +18,7 @@ func main() {
 		code, _ := reader.ReadString('\n')
 		fmt.Printf("< code: %v\n", code)
 
-		lexer := lexer.NewLexer(code)
-		parser := parser.NewParser(lexer, nil)
-
-		ast, err := parser.Parse()
+		ast, err := parser.Parse(code)
 		if err != nil {
 			fmt.Println(err)
 			continue

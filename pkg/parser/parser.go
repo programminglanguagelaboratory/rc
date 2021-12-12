@@ -11,29 +11,25 @@ import (
 	"github.com/programminglanguagelaboratory/rc/pkg/token"
 )
 
-type Parser struct {
+type parser struct {
 	lexer *lexer.Lexer
 	tok   token.Token
 	table *table.Table
 }
 
-func (p *Parser) next() {
+func (p *parser) next() {
 	p.tok, _ = p.lexer.Lex()
 }
 
-func NewParser(l *lexer.Lexer, t *table.Table) *Parser {
-	p := Parser{}
-	p.lexer = l
+func Parse(code string) (ast.Expr, error) {
+	p := parser{}
+	p.lexer = lexer.NewLexer(code)
 	p.tok, _ = p.lexer.Lex()
-	p.table = t
-	return &p
-}
-
-func (p *Parser) Parse() (ast.Expr, error) {
+	p.table = nil
 	return p.parseExpr()
 }
 
-func (p *Parser) parseExpr() (ast.Expr, error) {
+func (p *parser) parseExpr() (ast.Expr, error) {
 	expr, err := p.parseBinaryExpr(0)
 	if err != nil {
 		return nil, err
@@ -46,7 +42,7 @@ func (p *Parser) parseExpr() (ast.Expr, error) {
 	return expr, nil
 }
 
-func (p *Parser) parseDeclExpr(e ast.Expr) (ast.Expr, error) {
+func (p *parser) parseDeclExpr(e ast.Expr) (ast.Expr, error) {
 	x, ok := e.(ast.IdentExpr)
 	if !ok {
 		return nil, fmt.Errorf("expected lhs, but got: %v", p.tok.Kind)
@@ -79,7 +75,7 @@ func (p *Parser) parseDeclExpr(e ast.Expr) (ast.Expr, error) {
 	return ast.DeclExpr{Name: id, Value: value, Body: body}, nil
 }
 
-func (p *Parser) parseBinaryExpr(prevPrec int) (ast.Expr, error) {
+func (p *parser) parseBinaryExpr(prevPrec int) (ast.Expr, error) {
 	x, err := p.parseUnaryExpr()
 	if err != nil {
 		return nil, err
@@ -103,7 +99,7 @@ func (p *Parser) parseBinaryExpr(prevPrec int) (ast.Expr, error) {
 	}
 }
 
-func (p *Parser) parseUnaryExpr() (ast.Expr, error) {
+func (p *parser) parseUnaryExpr() (ast.Expr, error) {
 	switch p.tok.Kind {
 	case token.MINUS, token.EXCLAMATION:
 		t := ast.UnaryExpr{Token: p.tok}
@@ -121,7 +117,7 @@ func (p *Parser) parseUnaryExpr() (ast.Expr, error) {
 	}
 }
 
-func (p *Parser) parseCallExpr() (ast.Expr, error) {
+func (p *parser) parseCallExpr() (ast.Expr, error) {
 	x, err := p.parsePrimaryExpr()
 	if err != nil {
 		return nil, err
@@ -139,7 +135,7 @@ func (p *Parser) parseCallExpr() (ast.Expr, error) {
 	return x, nil
 }
 
-func (p *Parser) parsePrimaryExpr() (ast.Expr, error) {
+func (p *parser) parsePrimaryExpr() (ast.Expr, error) {
 	expr, err := p.parseLitOrParenExpr()
 	if err != nil {
 		return nil, err
@@ -161,7 +157,7 @@ L:
 	return expr, nil
 }
 
-func (p *Parser) parseFieldExpr(x ast.Expr) (ast.Expr, error) {
+func (p *parser) parseFieldExpr(x ast.Expr) (ast.Expr, error) {
 	if p.tok.Kind != token.DOT {
 		return nil, fmt.Errorf("expected dot, but got: %v", p.tok.Kind)
 	}
@@ -176,26 +172,26 @@ func (p *Parser) parseFieldExpr(x ast.Expr) (ast.Expr, error) {
 	return ast.FieldExpr{X: x, Y: ast.Id(y)}, nil
 }
 
-func (p *Parser) parseLitOrParenExpr() (ast.Expr, error) {
+func (p *parser) parseLitOrParenExpr() (ast.Expr, error) {
 	switch p.tok.Kind {
 	case token.ID:
-		t := ast.IdentExpr{Token: p.tok, Value: p.tok.Text}
+		e := ast.IdentExpr{Token: p.tok, Value: p.tok.Text}
 		p.next()
-		return t, nil
+		return e, nil
 	case token.STRING:
-		t := ast.StringExpr{Token: p.tok, Value: p.tok.Text}
+		e := ast.StringExpr{Token: p.tok, Value: p.tok.Text}
 		p.next()
-		return t, nil
+		return e, nil
 	case token.NUMBER:
-		n, _ := strconv.ParseInt(p.tok.Text, 0, 64)
-		t := ast.NumberExpr{Token: p.tok, Value: n}
+		v, _ := strconv.ParseInt(p.tok.Text, 0, 64)
+		e := ast.NumberExpr{Token: p.tok, Value: v}
 		p.next()
-		return t, nil
+		return e, nil
 	case token.BOOL:
-		b, _ := strconv.ParseBool(p.tok.Text)
-		t := ast.BoolExpr{Token: p.tok, Value: b}
+		v, _ := strconv.ParseBool(p.tok.Text)
+		e := ast.BoolExpr{Token: p.tok, Value: v}
 		p.next()
-		return t, nil
+		return e, nil
 	case token.LPAREN:
 		return p.parseParenExpr()
 	}
@@ -203,7 +199,7 @@ func (p *Parser) parseLitOrParenExpr() (ast.Expr, error) {
 	return nil, errors.New("unexpected token")
 }
 
-func (p *Parser) parseParenExpr() (ast.Expr, error) {
+func (p *parser) parseParenExpr() (ast.Expr, error) {
 	if p.tok.Kind != token.LPAREN {
 		return nil, fmt.Errorf("expected lparen, but got: %v", p.tok.Kind)
 	}

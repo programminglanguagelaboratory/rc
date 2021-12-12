@@ -5,7 +5,6 @@ import (
 	"testing"
 
 	"github.com/programminglanguagelaboratory/rc/pkg/ast"
-	"github.com/programminglanguagelaboratory/rc/pkg/lexer"
 	"github.com/programminglanguagelaboratory/rc/pkg/token"
 )
 
@@ -151,7 +150,7 @@ func TestExpr(t *testing.T) {
 			},
 		},
 	} {
-		actual, err := NewParser(lexer.NewLexer(tt.code), nil).parseExpr()
+		actual, err := Parse(tt.code)
 		if err != nil {
 			t.Errorf("given %v, expected %v, but got an error: %v", tt.code, tt.expected, err)
 			continue
