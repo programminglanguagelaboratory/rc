@@ -46,16 +46,15 @@ func (p *Parser) parseExpr() (ast.Expr, error) {
 	return expr, nil
 }
 
-func (p *Parser) parseDeclExpr(name ast.Expr) (ast.Expr, error) {
-	var ok bool
-	var l ast.IdentExpr
-	if l, ok = name.(ast.IdentExpr); !ok {
+func (p *Parser) parseDeclExpr(e ast.Expr) (ast.Expr, error) {
+	x, ok := e.(ast.IdentExpr)
+	if !ok {
 		return nil, fmt.Errorf("expected lhs, but got: %v", p.tok.Kind)
 	}
-	if l.Token.Kind != token.ID {
+	if x.Token.Kind != token.ID {
 		return nil, fmt.Errorf("expected lhs, but got: %v", p.tok.Kind)
 	}
-	id := ast.Id(l.Token.Text)
+	id := ast.Id(x.Token.Text)
 
 	if p.tok.Kind != token.COLONEQUALS {
 		return nil, fmt.Errorf("expected :=, but got: %v", p.tok.Kind)
@@ -81,7 +80,7 @@ func (p *Parser) parseDeclExpr(name ast.Expr) (ast.Expr, error) {
 }
 
 func (p *Parser) parseBinaryExpr(prevPrec int) (ast.Expr, error) {
-	left, err := p.parseUnaryExpr()
+	x, err := p.parseUnaryExpr()
 	if err != nil {
 		return nil, err
 	}
@@ -89,18 +88,18 @@ func (p *Parser) parseBinaryExpr(prevPrec int) (ast.Expr, error) {
 	for {
 		prec := p.tok.Kind.GetPrec()
 		if prec < prevPrec {
-			return left, nil
+			return x, nil
 		}
 
 		tok := p.tok
 		p.next()
 
-		right, err := p.parseBinaryExpr(prec + 1)
+		y, err := p.parseBinaryExpr(prec + 1)
 		if err != nil {
 			return nil, err
 		}
 
-		left = ast.BinaryExpr{X: left, Y: right, Token: tok}
+		x = ast.BinaryExpr{X: x, Y: y, Token: tok}
 	}
 }
 
@@ -110,12 +109,12 @@ func (p *Parser) parseUnaryExpr() (ast.Expr, error) {
 		t := ast.UnaryExpr{Token: p.tok}
 		p.next()
 
-		left, err := p.parseUnaryExpr()
+		x, err := p.parseUnaryExpr()
 		if err != nil {
 			return nil, err
 		}
 
-		t.X = left
+		t.X = x
 		return t, nil
 	default:
 		return p.parseCallExpr()
@@ -162,19 +161,19 @@ L:
 	return expr, nil
 }
 
-func (p *Parser) parseFieldExpr(left ast.Expr) (ast.Expr, error) {
+func (p *Parser) parseFieldExpr(x ast.Expr) (ast.Expr, error) {
 	if p.tok.Kind != token.DOT {
 		return nil, fmt.Errorf("expected dot, but got: %v", p.tok.Kind)
 	}
 	p.next()
 
-	right := p.tok.Text
+	y := p.tok.Text
 	if p.tok.Kind != token.ID {
 		return nil, fmt.Errorf("expected id, but got: %v", p.tok.Kind)
 	}
 	p.next()
 
-	return ast.FieldExpr{Left: left, Right: ast.Id(right)}, nil
+	return ast.FieldExpr{X: x, Y: ast.Id(y)}, nil
 }
 
 func (p *Parser) parseLitOrParenExpr() (ast.Expr, error) {

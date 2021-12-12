@@ -34,8 +34,8 @@ type CallExpr struct {
 }
 
 type FieldExpr struct {
-	Left  Expr
-	Right Id
+	X Expr
+	Y Id
 }
 
 type IdentExpr struct {

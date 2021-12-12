@@ -110,22 +110,22 @@ func TestExpr(t *testing.T) {
 		{
 			"f.x",
 			ast.FieldExpr{
-				Left:  ast.IdentExpr{Token: token.Token{Text: "f", Kind: token.ID}, Value: "f"},
-				Right: "x",
+				X: ast.IdentExpr{Token: token.Token{Text: "f", Kind: token.ID}, Value: "f"},
+				Y: "x",
 			},
 		},
 		/* {
 			"x . f 10 . g 20",
 			ast.CallExpr{
 				Func: ast.FieldExpr{
-					Left: ast.CallExpr{
+					X: ast.CallExpr{
 						Func: ast.FieldExpr{
-							Left:  ast.LitExpr{Token: token.Token{Text: "x", Kind: token.ID}},
-							Right: "f",
+							X: ast.LitExpr{Token: token.Token{Text: "x", Kind: token.ID}},
+							Y: "f",
 						},
 						Arg: ast.LitExpr{Token: token.Token{Text: "10", Kind: token.NUMBER}},
 					},
-					Right: "g",
+					Y: "g",
 				},
 				Arg: ast.LitExpr{Token: token.Token{Text: "20", Kind: token.NUMBER}},
 			},
