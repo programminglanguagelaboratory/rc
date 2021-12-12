@@ -36,10 +36,13 @@ func (t *BoolTyp) String() string {
 	return "bool"
 }
 
-type FuncTyp struct{}
+type FuncTyp struct {
+	From Typ
+	To   Typ
+}
 
-func NewFunc() *FuncTyp {
-	return &FuncTyp{}
+func NewFunc(from, to Typ) *FuncTyp {
+	return &FuncTyp{From: from, To: to}
 }
 
 func (t *FuncTyp) String() string {

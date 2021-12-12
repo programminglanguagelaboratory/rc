@@ -103,7 +103,7 @@ func Infer(e ast.Expr) (typ.Typ, error) {
 	case *constTyp:
 		return inferTyp.t, nil
 	case *funcTyp:
-		return typ.NewFunc(), nil
+		return typ.NewFunc(inferTyp.from, inferTyp.to), nil
 	default:
 		return nil, errors.New("not impl")
 	}
