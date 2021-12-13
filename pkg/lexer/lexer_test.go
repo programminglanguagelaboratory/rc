@@ -49,6 +49,7 @@ func TestToken(t *testing.T) {
 		actual, err := NewLexer(tt.code).Lex()
 		if err != nil {
 			t.Errorf("given %v, expected %v, but got an error: %v", tt.code, tt.expected, err)
+			continue
 		}
 		if tt.expected != actual {
 			t.Errorf("given %v, expected %v, but got actual %v", tt.code, tt.expected, actual)
