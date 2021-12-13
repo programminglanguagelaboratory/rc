@@ -39,6 +39,7 @@ func TestToken(t *testing.T) {
 		{"(", token.Token{Text: "(", Kind: token.LPAREN}},
 		{")", token.Token{Text: ")", Kind: token.RPAREN}},
 
+		{"=>", token.Token{Text: "=>", Kind: token.EQUALSGREATERTHAN}},
 		{"fn", token.Token{Text: "fn", Kind: token.FN}},
 		{":=", token.Token{Text: ":=", Kind: token.COLONEQUALS}},
 		{";", token.Token{Text: ";", Kind: token.SEMICOLON}},

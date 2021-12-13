@@ -37,6 +37,7 @@ const (
 	COMMA
 	LPAREN
 	RPAREN
+	EQUALSGREATERTHAN
 	FN
 	COLONEQUALS
 	SEMICOLON
@@ -65,6 +66,7 @@ var kinds = [...]string{
 	COMMA:              ",",
 	LPAREN:             "(",
 	RPAREN:             ")",
+	EQUALSGREATERTHAN:  "=>",
 	FN:                 "fn",
 	COLONEQUALS:        ":=",
 	SEMICOLON:          ";",
@@ -93,6 +95,8 @@ func (k Kind) GetPrec() int {
 		return 4
 	case ASTERISK, SLASH:
 		return 5
+	case EQUALSGREATERTHAN:
+		return 6
 	}
 	return -1
 }
