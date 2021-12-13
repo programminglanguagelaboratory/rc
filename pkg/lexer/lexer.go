@@ -151,6 +151,11 @@ func (l *Lexer) Lex() (token.Token, error) {
 			return token.Token{Text: "==", Kind: token.EQUALSEQUALS}, nil
 		}
 
+		if l.ch == '>' {
+			l.next()
+			return token.Token{Text: "=>", Kind: token.EQUALSGREATERTHAN}, nil
+		}
+
 		return token.Token{}, fmt.Errorf("unexpected rune: %q", l.ch)
 
 	case l.ch == '!':
