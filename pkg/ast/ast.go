@@ -59,7 +59,6 @@ type BoolExpr struct {
 }
 
 type FuncLitExpr struct {
-	Name  Id
-	Param Expr
-	Body  Expr
+	Name Id
+	Body Expr
 }
