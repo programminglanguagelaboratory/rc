@@ -134,7 +134,7 @@ func (c *context) inferExpr(e ast.Expr) (inferTyp, Subst, error) {
 		return &constTyp{typ.NewNumber()}, nil, nil
 	case ast.BoolExpr:
 		return &constTyp{typ.NewBool()}, nil, nil
-	case ast.FuncLitExpr:
+	case ast.FuncExpr:
 		nameTypVar := c.GenId()
 		nameTyp := inferTyp(&varTyp{nameTypVar})
 		c.tvs[nameTypVar] = &scheme{t: nameTyp}

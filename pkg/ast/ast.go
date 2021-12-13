@@ -6,11 +6,6 @@ type Expr interface{}
 
 type Id string
 
-type Field struct {
-	Typ  []Id
-	Name Id
-}
-
 type DeclExpr struct {
 	Name  Id
 	Value Expr
@@ -58,7 +53,7 @@ type BoolExpr struct {
 	Value bool
 }
 
-type FuncLitExpr struct {
+type FuncExpr struct {
 	Name Id
 	Body Expr
 }
