@@ -5,21 +5,13 @@ import (
 	"testing"
 
 	"github.com/programminglanguagelaboratory/rc/pkg/ast"
+	"github.com/programminglanguagelaboratory/rc/pkg/parser"
 	"github.com/programminglanguagelaboratory/rc/pkg/token"
 )
 
 func TestBinaryExpr(t *testing.T) {
-	expr := ast.BinaryExpr{
-		X: ast.IdentExpr{
-			Token: token.Token{Text: "a", Kind: token.ID},
-			Value: "a",
-		},
-		Y: ast.IdentExpr{
-			Token: token.Token{Text: "b", Kind: token.ID},
-			Value: "b",
-		},
-		Token: token.Token{Text: "&&", Kind: token.AMPERSANDAMPERSAND},
-	}
+	code := "a && b"
+	expr, _ := parser.Parse(code)
 	expected := ast.CallExpr{
 		Func: ast.CallExpr{
 			Func: ast.IdentExpr{
@@ -48,17 +40,12 @@ func TestBinaryExpr(t *testing.T) {
 }
 
 func TestUnaryExpr(t *testing.T) {
-	expr := ast.UnaryExpr{
-		X: ast.IdentExpr{
-			Token: token.Token{Text: "a", Kind: token.ID},
-			Value: "a",
-		},
-		Token: token.Token{Text: "+", Kind: token.PLUS},
-	}
+	code := "!a"
+	expr, _ := parser.Parse(code)
 	expected := ast.CallExpr{
 		Func: ast.IdentExpr{
-			Token: token.Token{Text: "+", Kind: token.PLUS},
-			Value: "+",
+			Token: token.Token{Text: "!", Kind: token.EXCLAMATION},
+			Value: "!",
 		},
 		Arg: ast.IdentExpr{
 			Token: token.Token{Text: "a", Kind: token.ID},
