@@ -149,6 +149,23 @@ func TestExpr(t *testing.T) {
 				},
 			},
 		},
+		{
+			"a => 10",
+			ast.FuncExpr{
+				Name: ast.Id("a"),
+				Body: ast.NumberExpr{Token: token.Token{Text: "10", Kind: token.NUMBER}, Value: 10},
+			},
+		},
+		{
+			"a => b => a + b",
+			ast.FuncExpr{
+				Name: ast.Id("a"),
+				Body: ast.FuncExpr{
+					Name: ast.Id("b"),
+					Body: ast.NumberExpr{Token: token.Token{Text: "10", Kind: token.NUMBER}, Value: 10},
+				},
+			},
+		},
 	} {
 		actual, err := Parse(tt.code)
 		if err != nil {
