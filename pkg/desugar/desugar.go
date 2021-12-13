@@ -14,24 +14,27 @@ func Desugar(e ast.Expr) ast.Expr {
 }
 
 func desugarBinaryExpr(e ast.BinaryExpr) ast.CallExpr {
+	x := Desugar(e.X)
+	y := Desugar(e.Y)
 	return ast.CallExpr{
 		Func: ast.CallExpr{
 			Func: ast.IdentExpr{
 				Token: e.Token,
 				Value: e.Token.Text,
 			},
-			Arg: e.X,
+			Arg: x,
 		},
-		Arg: e.Y,
+		Arg: y,
 	}
 }
 
 func desugarUnaryExpr(e ast.UnaryExpr) ast.CallExpr {
+	x := Desugar(e.X)
 	return ast.CallExpr{
 		Func: ast.IdentExpr{
 			Token: e.Token,
 			Value: e.Token.Text,
 		},
-		Arg: e.X,
+		Arg: x,
 	}
 }
