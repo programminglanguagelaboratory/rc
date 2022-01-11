@@ -102,10 +102,12 @@ func Infer(e ast.Expr) (typ.Typ, error) {
 	switch inferTyp := inferTyp.(type) {
 	case *constTyp:
 		return inferTyp.t, nil
+	case *varTyp:
+		return typ.NewVar(inferTyp.tv), nil
 	case *funcTyp:
 		return typ.NewFunc(inferTyp.from, inferTyp.to), nil
 	default:
-		return nil, errors.New("not impl")
+		return nil, errors.New("unreachable")
 	}
 }
 
