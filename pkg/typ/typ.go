@@ -48,3 +48,15 @@ func NewFunc(from, to Typ) *FuncTyp {
 func (t *FuncTyp) String() string {
 	return "fn"
 }
+
+type VarTyp struct {
+	Ident string
+}
+
+func NewVar(ident string) *VarTyp {
+	return &VarTyp{Ident: ident}
+}
+
+func (t *VarTyp) String() string {
+	return "var"
+}
