@@ -157,6 +157,20 @@ func TestExpr(t *testing.T) {
 			},
 		},
 		{
+			"const10 := x => 10; x 20",
+			ast.DeclExpr{
+				Name: ast.Id("const10"),
+				Value: ast.FuncExpr{
+					Name: ast.Id("x"),
+					Body: ast.NumberExpr{Token: token.Token{Text: "10", Kind: token.NUMBER}, Value: 10},
+				},
+				Body: ast.CallExpr{
+					Func: ast.IdentExpr{Token: token.Token{Text: "x", Kind: token.ID}, Value: "x"},
+					Arg:  ast.NumberExpr{Token: token.Token{Text: "20", Kind: token.NUMBER}, Value: 20},
+				},
+			},
+		},
+		{
 			"a => b => a + b",
 			ast.FuncExpr{
 				Name: ast.Id("a"),
