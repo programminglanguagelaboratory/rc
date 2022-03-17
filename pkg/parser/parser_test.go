@@ -162,7 +162,11 @@ func TestExpr(t *testing.T) {
 				Name: ast.Id("a"),
 				Body: ast.FuncExpr{
 					Name: ast.Id("b"),
-					Body: ast.NumberExpr{Token: token.Token{Text: "10", Kind: token.NUMBER}, Value: 10},
+					Body: ast.BinaryExpr{
+						X:     ast.IdentExpr{Token: token.Token{Text: "a", Kind: token.ID}, Value: "a"},
+						Y:     ast.IdentExpr{Token: token.Token{Text: "b", Kind: token.ID}, Value: "b"},
+						Token: token.Token{Text: "+", Kind: token.PLUS},
+					},
 				},
 			},
 		},
