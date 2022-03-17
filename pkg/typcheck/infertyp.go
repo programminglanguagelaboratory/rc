@@ -1,6 +1,7 @@
 package typcheck
 
 import (
+	"errors"
 	"fmt"
 
 	"github.com/programminglanguagelaboratory/rc/pkg/typ"
@@ -66,3 +67,7 @@ func (t *funcTyp) FreeTypeVars() []string {
 }
 func (t *funcTyp) inferType()     {}
 func (t *funcTyp) String() string { return t.from.String() + " -> " + t.to.String() }
+
+func Unify(t0, t1 inferTyp) (Subst, error) {
+	return nil, errors.New("not impl")
+}
