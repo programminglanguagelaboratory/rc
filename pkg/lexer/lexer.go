@@ -43,7 +43,7 @@ func (l *Lexer) next() {
 
 func (l *Lexer) lexIdOrBool() (token.Token, error) {
 	start := l.index
-	for l.ch != EOF && unicode.IsLetter(l.ch) {
+	for l.ch != EOF && (unicode.IsLetter(l.ch) || unicode.IsDigit(l.ch)) {
 		l.next()
 	}
 	str := l.code[start:l.index]
