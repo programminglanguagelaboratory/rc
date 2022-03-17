@@ -35,11 +35,36 @@ func (p *parser) parseExpr() (ast.Expr, error) {
 		return nil, err
 	}
 
-	if p.tok.Kind == token.COLONEQUALS {
+	switch p.tok.Kind {
+	case token.EQUALSGREATERTHAN:
+		return p.parseFuncLitExpr(expr)
+	case token.COLONEQUALS:
 		return p.parseDeclExpr(expr)
+	default:
+		return expr, nil
 	}
+}
 
-	return expr, nil
+func (p *parser) parseFuncLitExpr(e ast.Expr) (ast.Expr, error) {
+	x, ok := e.(ast.IdentExpr)
+	if !ok {
+		return nil, fmt.Errorf("expected lhs, but got: %v", p.tok.Kind)
+	}
+	if x.Token.Kind != token.ID {
+		return nil, fmt.Errorf("expected lhs, but got: %v", p.tok.Kind)
+	}
+	id := ast.Id(x.Value)
+
+	if p.tok.Kind != token.EQUALSGREATERTHAN {
+		return nil, fmt.Errorf("expected =>, but got: %v", p.tok.Kind)
+	}
+	p.next()
+
+	body, err := p.parseExpr()
+	if err != nil {
+		return nil, err
+	}
+	return ast.FuncExpr{Name: id, Body: body}, nil
 }
 
 func (p *parser) parseDeclExpr(e ast.Expr) (ast.Expr, error) {
