@@ -95,8 +95,6 @@ func (k Kind) GetPrec() int {
 		return 4
 	case ASTERISK, SLASH:
 		return 5
-	case EQUALSGREATERTHAN:
-		return 6
 	}
 	return -1
 }
