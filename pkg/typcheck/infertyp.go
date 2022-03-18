@@ -68,7 +68,7 @@ func (t *funcTyp) FreeTypeVars() []string {
 func (t *funcTyp) inferType()     {}
 func (t *funcTyp) String() string { return t.from.String() + " -> " + t.to.String() }
 
-func Unify(t0, t1 inferTyp) (Subst, error) {
+func unify(t0, t1 inferTyp) (Subst, error) {
 	c0, ok0 := t0.(*constTyp)
 	c1, ok1 := t1.(*constTyp)
 	if ok0 && ok1 && c0.t == c1.t {
@@ -78,12 +78,12 @@ func Unify(t0, t1 inferTyp) (Subst, error) {
 	f0, ok0 := t0.(*funcTyp)
 	f1, ok1 := t1.(*funcTyp)
 	if ok0 && ok1 {
-		s0, err := Unify(f0.from, f1.from)
+		s0, err := unify(f0.from, f1.from)
 		if err != nil {
 			return nil, err
 		}
 
-		s1, err := Unify(f0.to, f1.to)
+		s1, err := unify(f0.to, f1.to)
 		if err != nil {
 			return nil, err
 		}

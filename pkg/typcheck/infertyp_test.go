@@ -95,7 +95,7 @@ func TestUnify(t *testing.T) {
 			Subst{"a": &varTyp{"b"}},
 		},
 	} {
-		actual, err := Unify(tt.t0, tt.t1)
+		actual, err := unify(tt.t0, tt.t1)
 		if err != nil {
 			t.Errorf("given %v and %v, expected %v, but got an error %v", tt.t0, tt.t1, tt.expected, err)
 			continue
