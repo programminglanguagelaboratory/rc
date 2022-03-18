@@ -123,7 +123,24 @@ func (c *context) inferExpr(e ast.Expr) (inferTyp, Subst, error) {
 		}
 		return bodyTyp, composeSubst(valueSubst, bodySubst), nil
 	case ast.CallExpr:
-		return nil, nil, errors.New("not impl")
+		t0, s0, err := c.inferExpr(e.Func)
+		if err != nil {
+			return nil, nil, err
+		}
+
+		t1, s1, err := c.inferExpr(e.Arg)
+		if err != nil {
+			return nil, nil, err
+		}
+
+		tv := c.GenId()
+		t := inferTyp(&varTyp{tv})
+		s2, err := unify(t0.Apply(s1).(inferTyp), &funcTyp{from: t1, to: t})
+		if err != nil {
+			return nil, nil, err
+		}
+
+		return t.Apply(s2).(inferTyp), composeSubst(s2, composeSubst(s1, s0)), nil
 	case ast.IdentExpr:
 		s, ok := c.tvs[e.Value]
 		if !ok {
