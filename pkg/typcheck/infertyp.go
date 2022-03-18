@@ -1,7 +1,6 @@
 package typcheck
 
 import (
-	"errors"
 	"fmt"
 
 	"github.com/programminglanguagelaboratory/rc/pkg/typ"
@@ -98,7 +97,7 @@ func unify(t0, t1 inferTyp) (Subst, error) {
 	}
 
 	if !(ok0 || ok1) {
-		return nil, errors.New("unification failed")
+		return nil, fmt.Errorf("unification failed: %v and %v", t0, t1)
 	}
 
 	var v *varTyp
@@ -113,7 +112,7 @@ func unify(t0, t1 inferTyp) (Subst, error) {
 
 	for _, ftv := range t.FreeTypeVars() {
 		if v.tv == ftv {
-			return nil, errors.New("occurs check failed: infinite type")
+			return nil, fmt.Errorf("occurs check failed - infinite type: %v and %v", t0, t1)
 		}
 	}
 
