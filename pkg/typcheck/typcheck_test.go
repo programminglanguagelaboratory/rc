@@ -23,6 +23,9 @@ func TestInferExpr(t *testing.T) {
 		{"x := 10; \"hello\"", typ.NewString()},
 
 		{"f := x => 10; f 20", typ.NewNumber()},
+		{"f := x => 10; f false", typ.NewNumber()},
+		{"id := x => x; id false", typ.NewBool()},
+		{"k := x => y => x; id := a => a; (k id 10) false", typ.NewBool()},
 	} {
 		expr, err := parser.Parse(tt.code)
 		if err != nil {
