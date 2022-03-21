@@ -14,6 +14,7 @@ func TestInferExpr(t *testing.T) {
 		code     string
 		expected typ.Typ
 	}{
+		{"x => x", typ.NewFunc(typ.NewVar("x"), typ.NewVar("x"))},
 		{"\"hello\"", typ.NewString()},
 		{"10", typ.NewNumber()},
 		{"true", typ.NewBool()},
