@@ -115,6 +115,10 @@ func (c *context) inferExpr(e ast.Expr) (inferTyp, Subst, error) {
 	switch e := e.(type) {
 	case ast.DeclExpr:
 		valueTyp, valueSubst, err := c.inferExpr(e.Value)
+		if err != nil {
+			return nil, nil, err
+		}
+
 		c.tvs[string(e.Name)] = &scheme{t: valueTyp}
 		c.Apply(valueSubst)
 		bodyTyp, bodySubst, err := c.inferExpr(e.Body)
