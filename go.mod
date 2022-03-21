@@ -1,6 +1,6 @@
 module github.com/programminglanguagelaboratory/rc
 
-go 1.17
+go 1.18
 
 require github.com/llir/llvm v0.3.3
 
