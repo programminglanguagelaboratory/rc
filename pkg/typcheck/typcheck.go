@@ -159,14 +159,13 @@ func (c *context) inferExpr(e ast.Expr) (inferTyp, Subst, error) {
 		return &constTyp{typ.NewBool()}, nil, nil
 	case ast.FuncExpr:
 		nameTypVar := c.GenId()
-		nameTyp := inferTyp(&varTyp{nameTypVar})
-		c.tvs[nameTypVar] = &scheme{t: nameTyp}
+		nameTyp := &varTyp{nameTypVar}
+		c.tvs[string(e.Name)] = &scheme{t: nameTyp}
 		bodyTyp, bodySubst, err := c.inferExpr(e.Body)
 		if err != nil {
 			return nil, nil, err
 		}
-		nameTyp = nameTyp.Apply(bodySubst).(inferTyp)
-		return &funcTyp{from: nameTyp, to: bodyTyp}, bodySubst, nil
+		return &funcTyp{nameTyp.Apply(bodySubst).(inferTyp), bodyTyp}, bodySubst, nil
 	default:
 		return nil, nil, errors.New("unexpected sugared expression")
 	}
