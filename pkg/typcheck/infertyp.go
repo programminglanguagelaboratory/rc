@@ -7,6 +7,7 @@ import (
 )
 
 type inferTyp interface {
+	Typ() typ.Typ
 	Substitutable
 	fmt.Stringer
 	inferType()
@@ -16,6 +17,7 @@ type constTyp struct {
 	t typ.Typ
 }
 
+func (t *constTyp) Typ() typ.Typ                { return t.t }
 func (t *constTyp) Apply(s Subst) Substitutable { return t }
 func (t *constTyp) FreeTypeVars() []string      { return nil }
 func (t *constTyp) String() string              { return t.t.String() }
@@ -25,6 +27,7 @@ type varTyp struct {
 	tv string
 }
 
+func (t *varTyp) Typ() typ.Typ { return typ.NewVar(t.tv) }
 func (t *varTyp) Apply(s Subst) Substitutable {
 	c, ok := s[t.tv]
 	if !ok {
@@ -41,6 +44,7 @@ type funcTyp struct {
 	to   inferTyp
 }
 
+func (t *funcTyp) Typ() typ.Typ { return typ.NewFunc(t.from.Typ(), t.to.Typ()) }
 func (t *funcTyp) Apply(s Subst) Substitutable {
 	return &funcTyp{
 		from: t.from.Apply(s).(inferTyp),
@@ -64,8 +68,8 @@ func (t *funcTyp) FreeTypeVars() []string {
 	}
 	return ret
 }
-func (t *funcTyp) inferType()     {}
 func (t *funcTyp) String() string { return t.from.String() + " -> " + t.to.String() }
+func (t *funcTyp) inferType()     {}
 
 func unify(t0, t1 inferTyp) (Subst, error) {
 	c0, ok0 := t0.(*constTyp)

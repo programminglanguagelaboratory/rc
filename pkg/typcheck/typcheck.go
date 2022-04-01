@@ -98,16 +98,7 @@ func Infer(e ast.Expr) (typ.Typ, error) {
 		return nil, err
 	}
 
-	switch inferTyp := inferTyp.(type) {
-	case *constTyp:
-		return inferTyp.t, nil
-	case *varTyp:
-		return typ.NewVar(inferTyp.tv), nil
-	case *funcTyp:
-		return typ.NewFunc(inferTyp.from, inferTyp.to), nil
-	default:
-		return nil, errors.New("unreachable")
-	}
+	return inferTyp.Typ(), nil
 }
 
 func (c *context) inferExpr(e ast.Expr) (inferTyp, Subst, error) {
