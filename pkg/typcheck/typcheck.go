@@ -10,8 +10,8 @@ import (
 )
 
 type context struct {
-	tvs    map[string]*scheme
-	lastId int
+	schemes map[string]*scheme
+	lastId  int
 }
 
 func (c *context) GenId() string {
@@ -20,8 +20,8 @@ func (c *context) GenId() string {
 }
 
 func (c *context) Apply(subst Subst) Substitutable {
-	for tv, s := range c.tvs {
-		c.tvs[tv] = s.Apply(subst).(*scheme)
+	for tv, s := range c.schemes {
+		c.schemes[tv] = s.Apply(subst).(*scheme)
 	}
 	return c
 }
@@ -92,7 +92,7 @@ func (s *scheme) String() string {
 
 func Infer(e ast.Expr) (typ.Typ, error) {
 	c := &context{}
-	c.tvs = make(map[string]*scheme)
+	c.schemes = make(map[string]*scheme)
 	inferTyp, _, err := c.inferExpr(e)
 	if err != nil {
 		return nil, err
@@ -118,7 +118,7 @@ func (c *context) inferExpr(e ast.Expr) (inferTyp, Subst, error) {
 			return nil, nil, err
 		}
 
-		c.tvs[string(e.Name)] = &scheme{t: valueTyp}
+		c.schemes[string(e.Name)] = &scheme{t: valueTyp}
 		c.Apply(valueSubst)
 		bodyTyp, bodySubst, err := c.inferExpr(e.Body)
 		if err != nil {
@@ -145,7 +145,7 @@ func (c *context) inferExpr(e ast.Expr) (inferTyp, Subst, error) {
 
 		return t.Apply(s2).(inferTyp), composeSubst(s2, composeSubst(s1, s0)), nil
 	case ast.IdentExpr:
-		s, ok := c.tvs[e.Value]
+		s, ok := c.schemes[e.Value]
 		if !ok {
 			return nil, nil, fmt.Errorf("undefined variable: %s", s)
 		}
@@ -159,7 +159,7 @@ func (c *context) inferExpr(e ast.Expr) (inferTyp, Subst, error) {
 	case ast.FuncExpr:
 		nameTypVar := c.GenId()
 		nameTyp := &varTyp{nameTypVar}
-		c.tvs[string(e.Name)] = &scheme{t: nameTyp}
+		c.schemes[string(e.Name)] = &scheme{t: nameTyp}
 		bodyTyp, bodySubst, err := c.inferExpr(e.Body)
 		if err != nil {
 			return nil, nil, err
