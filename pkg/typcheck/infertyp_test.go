@@ -94,6 +94,11 @@ func TestUnify(t *testing.T) {
 			&funcTyp{&varTyp{"b"}, &constTyp{typ.NewBool()}},
 			Subst{"a": &varTyp{"b"}},
 		},
+		{
+			&funcTyp{&varTyp{"a"}, &varTyp{"a"}},
+			&funcTyp{&varTyp{"b"}, &constTyp{typ.NewBool()}},
+			Subst{"a": &varTyp{"b"}, "b": &constTyp{typ.NewBool()}},
+		},
 	} {
 		actual, err := unify(tt.t0, tt.t1)
 		if err != nil {
