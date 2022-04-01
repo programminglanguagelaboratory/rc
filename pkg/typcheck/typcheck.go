@@ -27,8 +27,7 @@ func (c *context) Apply(subst Subst) Substitutable {
 }
 
 func (c *context) FreeTypeVars() []string {
-	// panic("not impl")
-	return nil
+	panic("not impl")
 }
 
 type scheme struct {
