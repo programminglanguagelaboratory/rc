@@ -42,7 +42,7 @@ func TestInferExpr(t *testing.T) {
 		}
 
 		if !reflect.DeepEqual(tt.expected, actual) {
-			t.Errorf("given %v, expected \n%#v\n, but got actual \n%#v\n", tt.code, tt.expected, actual)
+			t.Errorf("given %v, expected %v, but got actual %v", tt.code, tt.expected, actual)
 		}
 	}
 }
