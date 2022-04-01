@@ -14,7 +14,7 @@ func TestInferExpr(t *testing.T) {
 		code     string
 		expected typ.Typ
 	}{
-		{"x => x", typ.NewFunc(typ.NewVar("x"), typ.NewVar("x"))},
+		{"x => x", typ.NewFunc(typ.NewVar("1"), typ.NewVar("1"))},
 		{"\"hello\"", typ.NewString()},
 		{"10", typ.NewNumber()},
 		{"true", typ.NewBool()},
@@ -41,8 +41,8 @@ func TestInferExpr(t *testing.T) {
 			continue
 		}
 
-		if tt.expected != actual {
-			t.Errorf("given %v, expected %v, but got actual %v", tt.code, tt.expected, actual)
+		if !reflect.DeepEqual(tt.expected, actual) {
+			t.Errorf("given %v, expected \n%#v\n, but got actual \n%#v\n", tt.code, tt.expected, actual)
 		}
 	}
 }
