@@ -10,8 +10,8 @@ import (
 )
 
 type context struct {
-	tvs    map[string]*scheme
-	lastId int
+	schemes map[string]*scheme
+	lastId  int
 }
 
 func (c *context) GenId() string {
@@ -20,15 +20,14 @@ func (c *context) GenId() string {
 }
 
 func (c *context) Apply(subst Subst) Substitutable {
-	for tv, s := range c.tvs {
-		c.tvs[tv] = s.Apply(subst).(*scheme)
+	for tv, s := range c.schemes {
+		c.schemes[tv] = s.Apply(subst).(*scheme)
 	}
 	return c
 }
 
 func (c *context) FreeTypeVars() []string {
-	// panic("not impl")
-	return nil
+	panic("not impl")
 }
 
 type scheme struct {
@@ -93,29 +92,24 @@ func (s *scheme) String() string {
 
 func Infer(e ast.Expr) (typ.Typ, error) {
 	c := &context{}
-	c.tvs = make(map[string]*scheme)
+	c.schemes = make(map[string]*scheme)
 	inferTyp, _, err := c.inferExpr(e)
 	if err != nil {
 		return nil, err
 	}
 
-	switch inferTyp := inferTyp.(type) {
-	case *constTyp:
-		return inferTyp.t, nil
-	case *varTyp:
-		return typ.NewVar(inferTyp.tv), nil
-	case *funcTyp:
-		return typ.NewFunc(inferTyp.from, inferTyp.to), nil
-	default:
-		return nil, errors.New("unreachable")
-	}
+	return inferTyp.Typ(), nil
 }
 
 func (c *context) inferExpr(e ast.Expr) (inferTyp, Subst, error) {
 	switch e := e.(type) {
 	case ast.DeclExpr:
 		valueTyp, valueSubst, err := c.inferExpr(e.Value)
-		c.tvs[string(e.Name)] = &scheme{t: valueTyp}
+		if err != nil {
+			return nil, nil, err
+		}
+
+		c.schemes[string(e.Name)] = &scheme{t: valueTyp.Apply(valueSubst).(inferTyp)}
 		c.Apply(valueSubst)
 		bodyTyp, bodySubst, err := c.inferExpr(e.Body)
 		if err != nil {
@@ -123,9 +117,27 @@ func (c *context) inferExpr(e ast.Expr) (inferTyp, Subst, error) {
 		}
 		return bodyTyp, composeSubst(valueSubst, bodySubst), nil
 	case ast.CallExpr:
-		return nil, nil, errors.New("not impl")
+		t0, s0, err := c.inferExpr(e.Func)
+		if err != nil {
+			return nil, nil, err
+		}
+
+		c.Apply(s0)
+		t1, s1, err := c.inferExpr(e.Arg)
+		if err != nil {
+			return nil, nil, err
+		}
+
+		tv := c.GenId()
+		t := inferTyp(&varTyp{tv})
+		s2, err := unify(t0.Apply(s1).(inferTyp), &funcTyp{from: t1, to: t})
+		if err != nil {
+			return nil, nil, err
+		}
+
+		return t.Apply(s2).(inferTyp), composeSubst(s2, composeSubst(s1, s0)), nil
 	case ast.IdentExpr:
-		s, ok := c.tvs[e.Value]
+		s, ok := c.schemes[e.Value]
 		if !ok {
 			return nil, nil, fmt.Errorf("undefined variable: %s", s)
 		}
@@ -138,14 +150,13 @@ func (c *context) inferExpr(e ast.Expr) (inferTyp, Subst, error) {
 		return &constTyp{typ.NewBool()}, nil, nil
 	case ast.FuncExpr:
 		nameTypVar := c.GenId()
-		nameTyp := inferTyp(&varTyp{nameTypVar})
-		c.tvs[nameTypVar] = &scheme{t: nameTyp}
+		nameTyp := &varTyp{nameTypVar}
+		c.schemes[string(e.Name)] = &scheme{t: nameTyp}
 		bodyTyp, bodySubst, err := c.inferExpr(e.Body)
 		if err != nil {
 			return nil, nil, err
 		}
-		nameTyp = nameTyp.Apply(bodySubst).(inferTyp)
-		return &funcTyp{from: nameTyp, to: bodyTyp}, bodySubst, nil
+		return &funcTyp{nameTyp.Apply(bodySubst).(inferTyp), bodyTyp}, bodySubst, nil
 	default:
 		return nil, nil, errors.New("unexpected sugared expression")
 	}

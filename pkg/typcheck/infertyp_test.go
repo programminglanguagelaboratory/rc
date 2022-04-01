@@ -67,3 +67,47 @@ func TestInferTypFreeTypeVars(t *testing.T) {
 		}
 	}
 }
+
+func TestUnify(t *testing.T) {
+	for _, tt := range []struct {
+		t0       inferTyp
+		t1       inferTyp
+		expected Subst
+	}{
+		{
+			&constTyp{t: typ.NewBool()},
+			&constTyp{t: typ.NewBool()},
+			nil,
+		},
+		{
+			&varTyp{"a"},
+			&varTyp{"a"},
+			nil,
+		},
+		{
+			&varTyp{"a"},
+			&constTyp{t: typ.NewBool()},
+			Subst{"a": &constTyp{typ.NewBool()}},
+		},
+		{
+			&funcTyp{&varTyp{"a"}, &constTyp{typ.NewBool()}},
+			&funcTyp{&varTyp{"b"}, &constTyp{typ.NewBool()}},
+			Subst{"a": &varTyp{"b"}},
+		},
+		{
+			&funcTyp{&varTyp{"a"}, &varTyp{"a"}},
+			&funcTyp{&varTyp{"b"}, &constTyp{typ.NewBool()}},
+			Subst{"a": &varTyp{"b"}, "b": &constTyp{typ.NewBool()}},
+		},
+	} {
+		actual, err := unify(tt.t0, tt.t1)
+		if err != nil {
+			t.Errorf("given %v and %v, expected %v, but got an error %v", tt.t0, tt.t1, tt.expected, err)
+			continue
+		}
+
+		if !reflect.DeepEqual(tt.expected, actual) {
+			t.Errorf("given %v and %v, expected %v, but got actual %v", tt.t0, tt.t1, tt.expected, actual)
+		}
+	}
+}
