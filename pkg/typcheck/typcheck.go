@@ -118,7 +118,7 @@ func (c *context) inferExpr(e ast.Expr) (inferTyp, Subst, error) {
 			return nil, nil, err
 		}
 
-		c.schemes[string(e.Name)] = &scheme{t: valueTyp}
+		c.schemes[string(e.Name)] = &scheme{t: valueTyp.Apply(valueSubst).(inferTyp)}
 		c.Apply(valueSubst)
 		bodyTyp, bodySubst, err := c.inferExpr(e.Body)
 		if err != nil {
@@ -131,6 +131,7 @@ func (c *context) inferExpr(e ast.Expr) (inferTyp, Subst, error) {
 			return nil, nil, err
 		}
 
+		c.Apply(s0)
 		t1, s1, err := c.inferExpr(e.Arg)
 		if err != nil {
 			return nil, nil, err
