@@ -82,7 +82,7 @@ func unify(t0, t1 inferTyp) (Subst, error) {
 			return nil, err
 		}
 
-		s1, err := unify(f0.to, f1.to)
+		s1, err := unify(f0.to.Apply(s0).(inferTyp), f1.to.Apply(s0).(inferTyp))
 		if err != nil {
 			return nil, err
 		}
